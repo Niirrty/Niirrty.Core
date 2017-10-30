@@ -1,0 +1,23 @@
+{
+   "name": "niirrty/niirrty.core",
+   "type": "library",
+   "description": "The core of all Niirrty PHP stuff :-)",
+   "license": "MIT",
+   "authors": [
+      {
+         "name": "Ni Irrty",
+         "email": "niirrty+code@gmail.com"
+      }
+   ],
+   "require": {
+      "php": ">=7.1"
+   },
+   "autoload": {
+      "files": [
+         "src/functions.php"
+      ],
+      "psr-4": {
+         "Niirrty\\": "src/"
+      }
+   }
+}
