@@ -310,6 +310,7 @@ function escape( string $str, $type = ESCAPE_HTML_ALL ) : string
    {
 
       case ESCAPE_HTML:
+      case ESCAPE_HTML_ALL:
          return escapeXML( $str );
 
       case ESCAPE_URL:
@@ -442,7 +443,7 @@ function strIReplace( $search, string $replace, string $subject, bool $useUnicod
    /** @noinspection ForeachInvariantsInspection */
    for ( $i = 0, $j = \count( $search ); $i < $j; $i++ )
    {
-      $search[ $i ] = \preg_quote( $search[ $i ] );
+      $search[ $i ] = \preg_quote( $search[ $i ], '~' );
    }
 
    // Build the regular expression

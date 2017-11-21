@@ -30,14 +30,6 @@ interface IArrayable
     */
    public function toArray() : array;
 
-   /**
-    * Re init the implementing class by a array, that defines all required instance data.
-    *
-    * @param  array $array
-    * @return \Niirrty\IStringable
-    */
-   public function fromArray( array $array );
-
 
 }
 

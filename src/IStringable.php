@@ -30,14 +30,6 @@ Interface IStringable
     */
    public function __toString();
 
-   /**
-    * Re init the implementing class by a string, that defines all required instance data.
-    *
-    * @param null|string $str
-    * @return \Niirrty\IStringable
-    */
-   public function fromString( ?string $str );
-
 
 }
 
