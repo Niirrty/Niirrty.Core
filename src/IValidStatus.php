@@ -28,6 +28,6 @@ interface IValidStatus
     *
     * @return bool
     */
-   public static function isValid() : bool;
+   public function isValid() : bool;
 
 }
