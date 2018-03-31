@@ -4,7 +4,7 @@
  * @copyright  (c) 2017, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.1.0
+ * @version        0.2.0
  */
 
 
@@ -17,7 +17,7 @@ namespace Niirrty;
 /**
  *  This is a static helper class, to better handle some PHP type juggling.
  */
-abstract class TypeTool
+final class TypeTool
 {
 
 
@@ -93,7 +93,7 @@ abstract class TypeTool
     * @param int   $intValueOut Returns the integer value if the method returns TRUE.
     * @return bool
     */
-   public static function TryParseInteger( $value, int &$intValueOut = 0 ) : bool
+   public static function TryParseInteger( $value, ?int &$intValueOut = 0 ) : bool
    {
 
       if ( \is_int( $value ) )
@@ -163,7 +163,7 @@ abstract class TypeTool
     * @param bool  $cultureInvariant If TRUE, also the comma can be used as decimal separator.
     * @return bool
     */
-   public static function TryParseFloat( $value, float &$floatValueOut = 0, bool $cultureInvariant = false ) : bool
+   public static function TryParseFloat( $value, ?float &$floatValueOut = 0, bool $cultureInvariant = false ) : bool
    {
 
       if ( \is_float( $value ) )
@@ -401,15 +401,6 @@ abstract class TypeTool
                return null;
             }
             $res = \str_replace( ',', '.', $string );
-            $tmp = \explode( '.', $res );
-            $ts  = \count( $tmp );
-            if ( $ts > 2 )
-            {
-               $dv = $tmp[ $ts - 1 ];
-               unset ( $tmp[ $ts - 1 ] );
-               $dv = \implode( '', $tmp ) . '.' . $dv;
-               return (float) $dv;
-            }
             return (float) $res;
 
          case 'int':
@@ -440,6 +431,7 @@ abstract class TypeTool
                   {
                      $res = \unserialize( $string );
                      if ( \is_array( $res ) ) { return $res; }
+                     else { throw new \Exception(); }
                   }
                   catch ( \Throwable $ex ) { }
                }
@@ -471,11 +463,14 @@ abstract class TypeTool
             }
             if ( \strlen( $string ) > 3 )
             {
-               if ( strStartsWith( $string, 'O:' ) && \preg_match( '~^O:[^"]+"' . $typename . '":~', $string ) )
+               if ( strStartsWith( $string, 'O:' ) && \preg_match( '~^O:[^"]+"' . \preg_quote( $typename ) . '":~', $string ) )
                {
                   $res = \unserialize( $string );
                   if ( ! \is_object( $res ) ) { return null; }
-                  if ( \get_class( $res ) === $typename ) { return $res; }
+                  if ( \get_class( $res ) === $typename )
+                  {
+                     return $res;
+                  }
                }
             }
             return null;
@@ -591,6 +586,11 @@ abstract class TypeTool
       if ( \is_float( $value ) )
       {
          return Type::PHP_FLOAT;
+      }
+
+      if ( \is_array( $value ) )
+      {
+         return Type::PHP_ARRAY;
       }
 
       return false;

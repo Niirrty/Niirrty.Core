@@ -4,7 +4,7 @@
  * @copyright  (c) 2017, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.1.0
+ * @version        0.2.0
  */
 
 
@@ -27,23 +27,16 @@ const ESCAPE_JSON     = 'json';
 /**
  * Extracts a sub string from $str with a defined encoding.
  *
- * @param      \string $str The string to work with.
- * @param      int    $start Start index (0-n) where the extraction begins.
- * @param      int    $length Length og the substring to extract or all, if the default value NULL is used.
- *             It also can use a negative value.
- * @param      string $charset Encoding of the string (defaults to 'UTF-8')
+ * @param      string   $str     The string to work with.
+ * @param      int      $start   Start index (0-n) where the extraction begins.
+ * @param      int|null $length  Length og the substring to extract or all, if the default value NULL is used.
+ *                               It also can use a negative value.
+ * @param      string   $charset Encoding of the string (defaults to 'UTF-8')
  * @return     string
  * @uses       Multi byte extension The function requires that PHP have the Multi byte extension mb_string enabled.
- * @since      v0.1
  */
-function substring( string $str, int $start, int $length = null, string $charset = 'UTF-8' ) : string
+function substring( string $str, int $start, ?int $length = null, string $charset = 'UTF-8' ) : string
 {
-
-   // Return a empty string, if $str is NULL
-   if ( null === $str )
-   {
-      return '';
-   }
 
    // If no length of $str is defined get it
    if ( null === $length )
@@ -72,10 +65,7 @@ function strPos( string $str, string $needle, bool $caseLess = false, string $ch
 {
 
    // If a required parameter is wrong, return -1
-   if ( null === $str ||
-        null === $needle ||
-        ''   === $needle ||
-        ''   === $str )
+   if ( '' === $needle || '' === $str )
    {
       return -1;
    }
@@ -116,10 +106,7 @@ function strLastPos( string $str, string $needle, bool $caseLess = false, string
 {
 
    // If a required parameter is wrong, return -1
-   if ( null === $str ||
-        null === $needle ||
-        ''   === $needle ||
-        ''   === $str )
+   if ( '' === $needle || '' === $str )
    {
       return -1;
    }
@@ -265,11 +252,7 @@ function strContains( string $str, string $needle, bool $caseLess = false, strin
 function escapeXML( string $str ) : string
 {
 
-   return \str_replace(
-      [ '&',     '<',    '>' ],
-      [ '&amp;', '&lt;', '&gt;' ],
-      $str
-   );
+   return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1, 'UTF-8' ) );
 
 }
 
@@ -283,11 +266,7 @@ function escapeXML( string $str ) : string
 function escapeXMLArg( string $str ) : string
 {
 
-   return \str_replace(
-      [ '&',     '<',    '>',    '"',      "'"  ],
-      [ '&amp;', '&lt;', '&gt;', '&quot;', '&#39;' ],
-      $str
-   );
+   return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1|\ENT_QUOTES, 'UTF-8' ) );
 
 }
 
@@ -310,8 +289,10 @@ function escape( string $str, $type = ESCAPE_HTML_ALL ) : string
    {
 
       case ESCAPE_HTML:
-      case ESCAPE_HTML_ALL:
          return escapeXML( $str );
+
+      case ESCAPE_HTML_ALL:
+         return escapeXMLArg( $str );
 
       case ESCAPE_URL:
          return \urlencode( $str );
@@ -339,15 +320,12 @@ function unescapeXML( string $str, bool $full = false ) : string
 
    // This strings will be replaced (if $full is TRUE it are regular expressions)
    $search = ! $full
-      ? [
-         '&auml;', '&Auml;', '&ouml;', '&Ouml;', '&uuml;', '&Uuml;',
-         '&lt;', '&gt;', '&quot;', '&#39;', '&amp;', '&deg;', '&szlig;'
-      ]
+      ? [ '&auml;', '&Auml;', '&ouml;', '&Ouml;', '&uuml;', '&Uuml;', '&#39;', '&deg;', '&szlig;', '&apos;', '&nbsp;' ]
       : [
-         '~&(quot|#34|#034|#x22);~i',
-         '~&(amp|#38|#038|#x26);~i',
-         '~&(lt|#60|#060|#x3c);~i',
-         '~&(gt|#62|#062|#x3e);~i',
+         '~&(#34|#034|#x22);~i',
+         '~&(#38|#038|#x26);~i',
+         '~&(#60|#060|#x3c);~i',
+         '~&(#62|#062|#x3e);~i',
          '~&(nbsp|#160|#xa0);~i',
          '~&(iexcl|#161);~i',
          '~&(cent|#162);~i',
@@ -363,28 +341,29 @@ function unescapeXML( string $str, bool $full = false ) : string
          '~&A(uml|UML);~',
          '~&O(uml|UML);~',
          '~&U(uml|UML);~',
-         '~&szlig;~i'
+         '~&szlig;~i',
+         '~&apos;~i'
       ];
 
    // The replacements depending to $full
    $replace = ! $full
       ? [
-         'ä', 'Ä', 'ö', 'Ö', 'ü', 'Ü', '<', '>', '"', "'", '&', '°', 'ß'
+         'ä', 'Ä', 'ö', 'Ö', 'ü', 'Ü', "'", '°', 'ß', "'", ' '
       ]
       : [
          '"', '&', '<', '>', ' ', \chr( 161 ), \chr( 162 ), \chr( 163 ), '©', '®', '°', \chr( 39 ), '€',
-         'ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü', 'ß'
+         'ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü', 'ß', "'"
       ];
 
    return ! $full
-      ? \str_replace ( $search, $replace, $str )
+      ? \str_replace ( $search, $replace, \htmlspecialchars_decode( $str ) )
       : \preg_replace_callback(
            '~&#(\d{1,4});~',
            function( $m )
            {
               return \chr( (int) $m[ 1 ] );
            },
-           \preg_replace( $search, $replace, $str )
+           \preg_replace( $search, $replace, \htmlspecialchars_decode( $str ) )
       );
 
 }
@@ -478,45 +457,16 @@ function stripTags( string $str ) : string
  *
  * @param  mixed       $value    The value to print out
  * @param  string|null $preClass Optional class attribute value of generated pre HTML element
- * @return string
  * @uses   \Niirrty\escapeXML
  * @since  v0.1
  */
-function print_h( string $value, ?string $preClass = null )
+function print_h( $value, ?string $preClass = null )
 {
 
    echo '<pre',
         ( ! empty( $preClass ) ? " class=\"{$preClass}\">" : '>' ),
         escapeXML( \print_r( $value, true ) ),
         '</pre>';
-   exit;
-
-}
-
-/**
- * @param      $value
- * @param bool $returnAsString Return var_dump output as string?
- * @return null|string
- */
-function var_dump( $value, bool $returnAsString = false )
-{
-
-   if ( $returnAsString )
-   {
-      \ob_start();
-   }
-
-   var_dump( $value );
-
-   $content = null;
-
-   if ( $returnAsString )
-   {
-      $content = \ob_get_contents();
-      \ob_end_clean();
-   }
-
-   return $content;
 
 }
 
@@ -542,278 +492,6 @@ function splitLines( string $string ) : array
 }
 
 /**
- * Converts a string from any of various encodings to UTF-8.
- *
- * @param  string  $string   The string to encode.
- * @param  string  $encoding The encoding of the string (default='ISO-8859-1')
- * @param  boolean $safeMode If the safe mode is set to TRUE, the original string is returned on errors.
- * @return string|null       Returns the encoded string, or NULL on error
- * @since  v0.1
- */
-function utf8Encode( string $string = '', string $encoding = 'iso-8859-1', bool $safeMode = false ) : ?string
-{
-
-   // Remember the string if we are in safe mode
-   $safe          = $safeMode ? $string : null;
-   $encodingUpper = \strtoupper( $encoding );
-
-   // Handle UTF-8
-   if ( 'UTF-8' === $encodingUpper || 'UTF8' === $encodingUpper )
-   {
-      return $string;
-   }
-
-   // Handle ISO-8859-1
-   if ( 'ISO-8859-1' === $encodingUpper )
-   {
-      return \utf8_encode( $string );
-   }
-
-   // Handle WINDOWS-1252
-   if ( 'WINDOWS-1252' === $encodingUpper )
-   {
-      return \utf8_encode( map_w1252_iso8859_1( $string ) );
-   }
-
-   // Normalize UTF-7 encoding name
-   if ( 'UNICODE-1-1-UTF-7' === $encodingUpper )
-   {
-      $encodingUpper = 'UTF-7';
-   }
-
-   if ( \function_exists( '\\mb_convert_encoding' ) )
-   {
-      try
-      {
-         $conv = \mb_convert_encoding( $string, 'UTF-8', $encodingUpper );
-         if ( $conv )
-         {
-            return $conv;
-         }
-      }
-      catch ( \Throwable $ex ) {}
-   }
-
-   if ( \function_exists( '\\iconv' ) )
-   {
-      try
-      {
-         $conv = \iconv( $encodingUpper, 'UTF-8', $string );
-         if ( $conv )
-         {
-            return $conv;
-         }
-      }
-      catch ( \Throwable $ex ) {}
-   }
-
-   return $safe;
-
-}
-
-/**
- * Converts a string from UTF-8 to any of various encodings
- *
- * @param  string  $string   The string to decode
- * @param  string  $encoding The target encoding. (default='ISO-8859-1')
- * @param  boolean $safeMode If set to TRUE, the original string is returned on errors
- * @return string|null       Returns the decoded string or FALSE on error.
- * @since  v0.1
- */
-function utf8Decode( string $string = '', string $encoding = 'iso-8859-1', bool $safeMode = false ) : ?string
-{
-
-   // Remember the string if we are in safe mode
-   $safe          = $safeMode ? $string : null;
-   $encodingUpper = \strtoupper( $encoding );
-
-   // Use default encoding if none is defined
-   if ( empty( $encodingUpper ) )
-   {
-      $encodingUpper = 'ISO-8859-1';
-   }
-
-   if ( 'UTF-8' === $encodingUpper || 'UTF8' === $encodingUpper )
-   {
-      return $string;
-   }
-
-   if ( 'ISO-8859-1' === $encodingUpper )
-   {
-      return \utf8_decode( $string );
-   }
-
-   if ( 'WINDOWS-1252' === $encodingUpper )
-   {
-      return map_iso8859_1_w1252( \utf8_decode( $string ) );
-   }
-
-   if ( 'UNICODE-1-1-UTF-7' === $encodingUpper )
-   {
-      $encodingUpper = 'UTF-7';
-   }
-
-   if ( \function_exists( '\\mb_convert_encoding' ) )
-   {
-      try
-      {
-         $conv = \mb_convert_encoding( $string, $encodingUpper, 'UTF-8' );
-         if ( $conv )
-         {
-            return $conv;
-         }
-      }
-      catch ( \Throwable $ex ) {}
-   }
-
-   if ( \function_exists( '\\iconv' ) )
-   {
-      try
-      {
-         $conv = \iconv('UTF-8', $encodingUpper, $string );
-         if ( $conv )
-         {
-            return $conv;
-         }
-      }
-      catch ( \Throwable $ex ) {}
-   }
-
-   return $safe;
-
-}
-
-/**
- * Special treatment for our guys in Redmond,
- * Windows-1252 is basically ISO-8859-1 -- with some exceptions, which get accounted for here.
- *
- * @param  string $string Your input in Win1252
- * @return string         The resulting ISO-8859-1 string
- * @since  v0.1
- */
-function map_w1252_iso8859_1( string $string = '' ) : string
-{
-   if ( '' === $string )
-   {
-      return '';
-   }
-
-   $return = '';
-   for ( $i = 0, $c = \strlen( $string ); $i < $c; $i++ )
-   {
-
-      $c = \ord( $string[ $i ] );
-
-      switch ( $c )
-      {
-
-         case 129:
-            $return .= \chr( 252 );
-            break;
-
-         case 132:
-            $return .= \chr( 228 );
-            break;
-
-         case 142:
-            $return .= \chr( 196 );
-            break;
-
-         case 148:
-            $return .= \chr( 246 );
-            break;
-
-         case 153:
-            $return .= \chr( 214 );
-            break;
-
-         case 154:
-            $return .= \chr( 220 );
-            break;
-
-         case 225:
-            $return .= \chr( 223 );
-            break;
-
-         default:
-            $return .= \chr( $c  );
-            break;
-
-      }
-
-   }
-
-   return $return;
-
-}
-
-/**
- * Special treatment for our guys in Redmond.
- * Windows-1252 is basically ISO-8859-1 -- with some exceptions, which get accounted for here.
- *
- * @param  string $string Your input in ISO-8859-1
- * @return string         The resulting Win1252 string
- * @since  v0.1
- */
-function map_iso8859_1_w1252( string $string = '' ) : string
-{
-
-   if ( '' === $string )
-   {
-      return '';
-   }
-
-   $return = '';
-
-   for ( $i = 0, $c = \strlen( $string ); $i < $c; $i++ )
-   {
-
-      $c = \ord( $string[ $i ] );
-
-      switch ( $c )
-      {
-
-         case 196:
-            $return .= \chr( 142 );
-            break;
-
-         case 214:
-            $return .= \chr( 153 );
-            break;
-
-         case 220:
-            $return .= \chr( 154 );
-            break;
-
-         case 223:
-            $return .= \chr( 225 );
-            break;
-
-         case 228:
-            $return .= \chr( 132 );
-            break;
-
-         case 246:
-            $return .= \chr( 148 );
-            break;
-
-         case 252:
-            $return .= \chr( 129 );
-            break;
-
-         default:
-            $return .= \chr( $c );
-            break;
-
-      }
-
-   }
-
-   return $return;
-
-}
-
-/**
  * This function is an extended {@see preg_match()} with the ability to use a callback function for detailed checks
  * of regexp parts/matches.
  *
@@ -832,10 +510,10 @@ function map_iso8859_1_w1252( string $string = '' ) : string
  *                            search (in bytes).
  * @return boolean            Returns if the $pattern and $callback matches successful for $subject.
  */
-function preg_match_callback( string $pattern, string $subject, callable $callback, &$matches, $flags = 0, $offset = 0 )
+function preg_match_callback( string $pattern, string $subject, ?callable $callback, &$matches = null, $flags = 0, $offset = 0 )
 {
 
-   if ( ! \preg_match( $pattern, "$subject", $matches, $flags, $offset ) )
+   if ( ! \preg_match( $pattern, $subject, $matches, $flags, $offset ) )
    {
       // The base regexp does not match, we are done here...
       return false;
@@ -846,7 +524,7 @@ function preg_match_callback( string $pattern, string $subject, callable $callba
 
       // $callback is callable, so we can use it (returns boolean)
       // and it becomes the $matches array from preg_match() as parameter
-      return $callback( $matches );
+      return (bool) $callback( $matches );
 
    }
 
@@ -892,18 +570,24 @@ function error_handler( $errNo, $errStr, $errFile, $errLine )
       case \E_NOTICE:
       case \E_USER_NOTICE:
       case \E_STRICT:
-         if ( ! \defined('DEBUG') && ! \defined('OSF_DEBUG') )
+         if ( ! \defined('DEBUG') && ! \defined('NIIRRTY_DEBUG') )
          {
             break;
          }
-         if ( \defined('OSF_NOTICES_SHOW') )
+         if ( \defined('NIIRRTY_NOTICES_SHOW') )
          {
             throw new PhpException( $errStr, $errNo, $errLine, $errFile );
          }
          break;
 
       default:
-         throw new PhpException( $errStr, $errNo, $errLine, $errFile );
+         // Never trigger a exception if PHPUnits Clover.php raises a error! :-(
+         // This is required for development needs because Clover.php raises a fatal error
+         // while using the bad error hiding @ operator in combination with mkdir.
+         if ( ! \Niirrty\strEndsWith( $errFile, 'Clover.php' ) )
+         {
+            throw new PhpException( $errStr, $errNo, $errLine, $errFile );
+         }
 
    }
 

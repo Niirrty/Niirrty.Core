@@ -4,7 +4,7 @@
  * @copyright  (c) 2017, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.1.0
+ * @version        0.2.0
  */
 
 
@@ -78,7 +78,7 @@ abstract class ArrayHelper
             {
                $attributes[ $key ] = TypeTool::StrToType( $attributes[ $key ], Type::PHP_BOOLEAN );
             }
-            else if ( \preg_match( '~^(multiple|selected|disabled|readonly|checked|required)$~i', $key ) )
+            else if ( \preg_match( '~^(multiple|selected|enabled|disabled|readonly|checked|required)$~i', $key ) )
             {
                $attributes[ $key ] = \strtolower( $key ) === \strtolower( $attributes[ $key ] );
             }
@@ -136,13 +136,20 @@ abstract class ArrayHelper
          // Convert the value to boolean if required and if it makes sense
          if ( $autoBoolean )
          {
-            if ( \preg_match( '~^(yes|no|on|off|true|false)$~i', $attributes[ $key ] ) )
+            if ( \preg_match( '~^(yes|no|on|off|true|false|0|1)$~i', $attributes[ $key ] ) )
             {
                $attributes[ $key ] = TypeTool::StrToType( $attributes[ $key ], Type::PHP_BOOLEAN );
             }
-            else if ( \preg_match( '~^(multiple|selected|disabled|readonly|checked|required)$~i', $key ) )
+            else if ( \preg_match( '~^(multiple|selected|enabled|disabled|readonly|checked|required)$~i', $key ) )
             {
-               $attributes[ $key ] = \strtolower( $key ) === \strtolower( $attributes[ $key ] );
+               if ( \strtolower( $key ) === \strtolower( $attributes[ $key ] ) )
+               {
+                  $attributes[ $key ] = true;
+               }
+               else if ( '' === $attributes[ $key ] )
+               {
+                  $attributes[ $key ] = true;
+               }
             }
          }
       }
@@ -179,6 +186,7 @@ abstract class ArrayHelper
     *
     * @param  array $attributes The associative array, defining the attributes
     * @return string
+    * @throws \Niirrty\ArgumentException If a value is not of type sting|bool|int|float|\DateTimeInterface
     */
    public static function CreateAttributeString( array $attributes ) : string
    {
@@ -208,9 +216,21 @@ abstract class ArrayHelper
          {
             $vl = (string) $v;
          }
+         else if ( \is_string( $v ) )
+         {
+            $vl = escapeXMLArg( $v );
+         }
+         else if ( $v instanceof \DateTimeInterface )
+         {
+            $vl = $v->format( 'Y-m-d H:i:s' );
+         }
          else
          {
-            $vl = escapeXMLArg( (string) $v );
+            throw new ArgumentException(
+               "attributes[{$key}]",
+               $v,
+               'Unsupported value type! Accepted types are string, bool, int, float, \\DateTimeInterface'
+            );
          }
 
          $res[] = \sprintf( '%s="%s"', $key, $vl );
@@ -427,7 +447,7 @@ abstract class ArrayHelper
 
       $count = \count( $array );
 
-      if ( $count < 1 || $startIndex >= $count )
+      if ( $count < 1 || $startIndex >= $count || 0 === $length )
       {
          return [];
       }
@@ -442,12 +462,7 @@ abstract class ArrayHelper
          $length = $count - $startIndex;
       }
 
-      if ( $length === 0 )
-      {
-         return [];
-      }
-
-      else if ( $length < 0 )
+      if ( $length < 0 )
       {
          $length = ( $count - $startIndex ) + $length;
       }

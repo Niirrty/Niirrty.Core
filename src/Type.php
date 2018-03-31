@@ -4,7 +4,7 @@
  * @copyright  (c) 2017, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.1.0
+ * @version        0.2.0
  */
 
 
@@ -118,6 +118,8 @@ class Type
          $this->stringValue = null;
       }
 
+      $this->typeName = Type::PHP_UNKNOWN;
+
       if ( null === $value )
       {
          $this->typeName = Type::PHP_NULL;
@@ -154,10 +156,6 @@ class Type
       {
          $this->typeName = Type::PHP_RESOURCE;
       }
-      else
-      {
-         $this->typeName = Type::PHP_UNKNOWN;
-      }
 
    }
 
@@ -185,7 +183,7 @@ class Type
 
       $res = ( $value->typeName === $this->typeName );
 
-      if ( ! $res || ! $strict )
+      if ( ! $res && $strict )
       {
          return $res;
       }
