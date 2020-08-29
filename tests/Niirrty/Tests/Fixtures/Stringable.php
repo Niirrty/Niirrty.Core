@@ -21,28 +21,28 @@ class Stringable implements IStringable
 {
 
 
-   private $_value;
+    private $_value;
 
 
-   public function __construct( $value )
-   {
+    public function __construct( $value )
+    {
 
-      $this->_value = $value;
+        $this->_value = $value;
 
-   }
+    }
 
 
-   /**
-    * Gets the string representation of the instance data for implementing class.
-    *
-    * @return string
-    */
-   public function __toString()
-   {
+    /**
+     * Gets the string representation of the instance data for implementing class.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
 
-      return (string) $this->_value;
+        return (string) $this->_value;
 
-   }
+    }
 
 }
 

@@ -19,14 +19,14 @@ class OperationNotSupportedExceptionTest extends TestCase
 {
 
 
-   public function testGetFunctionName()
-   {
-      try { throw new OperationNotSupportedException( 'A optional message' ); }
-      catch ( OperationNotSupportedException $ex )
-      {
-         $this->assertSame( 'PHPUnit\\TextUI\\Command::main', $ex->getFunctionName() );
-      }
-   }
+    public function testGetFunctionName()
+    {
+        try { throw new OperationNotSupportedException( 'A optional message' ); }
+        catch ( OperationNotSupportedException $ex )
+        {
+            $this->assertSame( 'PHPUnit\\TextUI\\Command::main', $ex->getFunctionName() );
+        }
+    }
 
 
 }

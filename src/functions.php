@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  (c) 2017, Niirrty
+ * @copyright  © 2017, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.2.0
+ * @version        0.3.0
  */
 
 
@@ -38,14 +38,14 @@ const ESCAPE_JSON     = 'json';
 function substring( string $str, int $start, ?int $length = null, string $charset = 'UTF-8' ) : string
 {
 
-   // If no length of $str is defined get it
-   if ( null === $length )
-   {
-      $length = \mb_strlen( $str, $charset ) - $start;
-   }
+    // If no length of $str is defined get it
+    if ( null === $length )
+    {
+        $length = \mb_strlen( $str, $charset ) - $start;
+    }
 
-   // return the substring result
-   return \mb_substr( $str, $start, $length, $charset );
+    // return the substring result
+    return \mb_substr( $str, $start, $length, $charset );
 
 }
 
@@ -64,30 +64,30 @@ function substring( string $str, int $start, ?int $length = null, string $charse
 function strPos( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8', int $offset = 0 ) : int
 {
 
-   // If a required parameter is wrong, return -1
-   if ( '' === $needle || '' === $str )
-   {
-      return -1;
-   }
+    // If a required parameter is wrong, return -1
+    if ( '' === $needle || '' === $str )
+    {
+        return -1;
+    }
 
-   if ( $caseLess )
-   {
-      // getting the caseless position
-      $result =  \mb_stripos( $str, $needle, $offset, $charset );
-   }
-   else
-   {
-      // Getting the position depending to the case
-      $result = \mb_strpos( $str, $needle, $offset, $charset );
-   }
+    if ( $caseLess )
+    {
+        // getting the caseless position
+        $result =  \mb_stripos( $str, $needle, $offset, $charset );
+    }
+    else
+    {
+        // Getting the position depending to the case
+        $result = \mb_strpos( $str, $needle, $offset, $charset );
+    }
 
-   // if noting was found, return -1
-   if ( ! \is_int( $result ) || $result < 0 )
-   {
-      return -1;
-   }
+    // if noting was found, return -1
+    if ( ! \is_int( $result ) || $result < 0 )
+    {
+        return -1;
+    }
 
-   return $result;
+    return $result;
 
 }
 
@@ -105,30 +105,30 @@ function strPos( string $str, string $needle, bool $caseLess = false, string $ch
 function strLastPos( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8' ) : int
 {
 
-   // If a required parameter is wrong, return -1
-   if ( '' === $needle || '' === $str )
-   {
-      return -1;
-   }
+    // If a required parameter is wrong, return -1
+    if ( '' === $needle || '' === $str )
+    {
+        return -1;
+    }
 
-   if ( $caseLess )
-   {
-      // getting the case less position
-      $idx =  \mb_strripos( $str, $needle, 0, $charset );
-   }
-   else
-   {
-      // Getting the position depending to the case
-      $idx = \mb_strrpos( $str, $needle, 0, $charset );
-   }
+    if ( $caseLess )
+    {
+        // getting the case less position
+        $idx =  \mb_strripos( $str, $needle, 0, $charset );
+    }
+    else
+    {
+        // Getting the position depending to the case
+        $idx = \mb_strrpos( $str, $needle, 0, $charset );
+    }
 
-   // if noting was found, return FALSE
-   if ( ! \is_int( $idx ) || $idx < 0 )
-   {
-      return -1;
-   }
+    // if noting was found, return FALSE
+    if ( ! \is_int( $idx ) || $idx < 0 )
+    {
+        return -1;
+    }
 
-   return $idx;
+    return $idx;
 
 }
 
@@ -148,29 +148,29 @@ function strLastPos( string $str, string $needle, bool $caseLess = false, string
 function strPositions( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8' ) : ?array
 {
 
-   // Init the array of positions, to return
-   $positions = [];
+    // Init the array of positions, to return
+    $positions = [];
 
-   // If nothing was found, return FALSE
-   if ( -1 === ( $idx = strPos( $str, $needle, $caseLess, $charset ) ) )
-   {
-      return null;
-   }
+    // If nothing was found, return FALSE
+    if ( -1 === ( $idx = strPos( $str, $needle, $caseLess, $charset ) ) )
+    {
+        return null;
+    }
 
-   // Adding the first position to the positions result array
-   $positions[] = $idx;
+    // Adding the first position to the positions result array
+    $positions[] = $idx;
 
-   // Getting the length of the needle string
-   $needleLen = \mb_strlen( $needle, $charset );
+    // Getting the length of the needle string
+    $needleLen = \mb_strlen( $needle, $charset );
 
-   // Finding all next positions
-   while ( -1 !== ( $next = strPos( $str, $needle, $caseLess, $charset, $idx + $needleLen ) ) )
-   {
-      $idx = $next;
-      $positions[] = $idx;
-   }
+    // Finding all next positions
+    while ( -1 !== ( $next = strPos( $str, $needle, $caseLess, $charset, $idx + $needleLen ) ) )
+    {
+        $idx = $next;
+        $positions[] = $idx;
+    }
 
-   return $positions;
+    return $positions;
 
 }
 
@@ -189,7 +189,7 @@ function strPositions( string $str, string $needle, bool $caseLess = false, stri
 function strStartsWith( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8' ) : bool
 {
 
-   return ( 0 === strPos( $str, $needle, $caseLess, $charset ) );
+    return ( 0 === strPos( $str, $needle, $caseLess, $charset ) );
 
 }
 
@@ -209,17 +209,17 @@ function strEndsWith( string $str, string $needle, bool $caseLess = false, strin
 {
 
 
-   // Getting the lengths of $needle and $str
-   $needleLength = \mb_strlen( $needle, $charset );
-   $stringLength = \mb_strlen( $str, $charset );
+    // Getting the lengths of $needle and $str
+    $needleLength = \mb_strlen( $needle, $charset );
+    $stringLength = \mb_strlen( $str, $charset );
 
-   // If $needle is empty, or if $needle is longer than $str, return FALSE
-   if ( ( $needleLength < 1 ) || ( $stringLength < $needleLength ) )
-   {
-      return false;
-   }
+    // If $needle is empty, or if $needle is longer than $str, return FALSE
+    if ( ( $needleLength < 1 ) || ( $stringLength < $needleLength ) )
+    {
+        return false;
+    }
 
-   return ( ( $stringLength - $needleLength ) === strLastPos( $str, $needle, $caseLess, $charset ) );
+    return ( ( $stringLength - $needleLength ) === strLastPos( $str, $needle, $caseLess, $charset ) );
 
 }
 
@@ -238,7 +238,7 @@ function strEndsWith( string $str, string $needle, bool $caseLess = false, strin
 function strContains( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8' ) : bool
 {
 
-   return ( -1 !== strPos( $str, $needle, $caseLess, $charset ) );
+    return ( -1 !== strPos( $str, $needle, $caseLess, $charset ) );
 
 }
 
@@ -252,7 +252,7 @@ function strContains( string $str, string $needle, bool $caseLess = false, strin
 function escapeXML( string $str ) : string
 {
 
-   return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1, 'UTF-8' ) );
+    return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1, 'UTF-8' ) );
 
 }
 
@@ -266,7 +266,7 @@ function escapeXML( string $str ) : string
 function escapeXMLArg( string $str ) : string
 {
 
-   return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1|\ENT_QUOTES, 'UTF-8' ) );
+    return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1|\ENT_QUOTES, 'UTF-8' ) );
 
 }
 
@@ -285,25 +285,22 @@ function escapeXMLArg( string $str ) : string
 function escape( string $str, $type = ESCAPE_HTML_ALL ) : string
 {
 
-   switch ( $type )
-   {
+    switch ( $type )
+    {
 
-      case ESCAPE_HTML:
-         return escapeXML( $str );
+        case ESCAPE_HTML:
+            return escapeXML( $str );
 
-      case ESCAPE_HTML_ALL:
-         return escapeXMLArg( $str );
+        case ESCAPE_URL:
+            return \urlencode( $str );
 
-      case ESCAPE_URL:
-         return \urlencode( $str );
+        case ESCAPE_JSON:
+            return \json_encode( $str );
 
-      case ESCAPE_JSON:
-         return \json_encode( $str );
+        default:
+            return escapeXMLArg( $str );
 
-      default:
-         return escapeXMLArg( $str );
-
-   }
+    }
 
 }
 
@@ -318,53 +315,53 @@ function escape( string $str, $type = ESCAPE_HTML_ALL ) : string
 function unescapeXML( string $str, bool $full = false ) : string
 {
 
-   // This strings will be replaced (if $full is TRUE it are regular expressions)
-   $search = ! $full
-      ? [ '&auml;', '&Auml;', '&ouml;', '&Ouml;', '&uuml;', '&Uuml;', '&#39;', '&deg;', '&szlig;', '&apos;', '&nbsp;' ]
-      : [
-         '~&(#34|#034|#x22);~i',
-         '~&(#38|#038|#x26);~i',
-         '~&(#60|#060|#x3c);~i',
-         '~&(#62|#062|#x3e);~i',
-         '~&(nbsp|#160|#xa0);~i',
-         '~&(iexcl|#161);~i',
-         '~&(cent|#162);~i',
-         '~&(pound|#163);~i',
-         '~&(copy|#169);~i',
-         '~&(reg|#174);~i',
-         '~&(deg|#176);~i',
-         '~&(#39|#039|#x27);~',
-         '~&(euro|#8364);~i',
-         '~&a(uml|UML);~',
-         '~&o(uml|UML);~',
-         '~&u(uml|UML);~',
-         '~&A(uml|UML);~',
-         '~&O(uml|UML);~',
-         '~&U(uml|UML);~',
-         '~&szlig;~i',
-         '~&apos;~i'
-      ];
+    // This strings will be replaced (if $full is TRUE it are regular expressions)
+    $search = ! $full
+        ? [ '&auml;', '&Auml;', '&ouml;', '&Ouml;', '&uuml;', '&Uuml;', '&#39;', '&deg;', '&szlig;', '&apos;', '&nbsp;' ]
+        : [
+            '~&(#34|#034|#x22);~i',
+            '~&(#38|#038|#x26);~i',
+            '~&(#60|#060|#x3c);~i',
+            '~&(#62|#062|#x3e);~i',
+            '~&(nbsp|#160|#xa0);~i',
+            '~&(iexcl|#161);~i',
+            '~&(cent|#162);~i',
+            '~&(pound|#163);~i',
+            '~&(copy|#169);~i',
+            '~&(reg|#174);~i',
+            '~&(deg|#176);~i',
+            '~&(#39|#039|#x27);~',
+            '~&(euro|#8364);~i',
+            '~&a(uml|UML);~',
+            '~&o(uml|UML);~',
+            '~&u(uml|UML);~',
+            '~&A(uml|UML);~',
+            '~&O(uml|UML);~',
+            '~&U(uml|UML);~',
+            '~&szlig;~i',
+            '~&apos;~i'
+        ];
 
-   // The replacements depending to $full
-   $replace = ! $full
-      ? [
-         'ä', 'Ä', 'ö', 'Ö', 'ü', 'Ü', "'", '°', 'ß', "'", ' '
-      ]
-      : [
-         '"', '&', '<', '>', ' ', \chr( 161 ), \chr( 162 ), \chr( 163 ), '©', '®', '°', \chr( 39 ), '€',
-         'ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü', 'ß', "'"
-      ];
+    // The replacements depending to $full
+    $replace = ! $full
+        ? [
+            'ä', 'Ä', 'ö', 'Ö', 'ü', 'Ü', "'", '°', 'ß', "'", ' '
+        ]
+        : [
+            '"', '&', '<', '>', ' ', \chr( 161 ), \chr( 162 ), \chr( 163 ), '©', '®', '°', \chr( 39 ), '€',
+            'ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü', 'ß', "'"
+        ];
 
-   return ! $full
-      ? \str_replace ( $search, $replace, \htmlspecialchars_decode( $str ) )
-      : \preg_replace_callback(
-           '~&#(\d{1,4});~',
-           function( $m )
-           {
-              return \chr( (int) $m[ 1 ] );
-           },
-           \preg_replace( $search, $replace, \htmlspecialchars_decode( $str ) )
-      );
+    return ! $full
+        ? \str_replace ( $search, $replace, \htmlspecialchars_decode( $str ) )
+        : \preg_replace_callback(
+              '~&#(\d{1,4});~',
+              function( $m )
+              {
+                  return \chr( (int) $m[ 1 ] );
+              },
+              \preg_replace( $search, $replace, \htmlspecialchars_decode( $str ) )
+        );
 
 }
 
@@ -392,13 +389,13 @@ function unescapeXML( string $str, bool $full = false ) : string
 function strMax( string $str, int $maxLength, string $appendix = '…', string $charset = 'UTF-8' ) : string
 {
 
-   // If no trimming is required return the origin string
-   if ( \mb_strlen( $str, $charset ) <= $maxLength )
-   {
-      return $str;
-   }
+    // If no trimming is required return the origin string
+    if ( \mb_strlen( $str, $charset ) <= $maxLength )
+    {
+        return $str;
+    }
 
-   return substring( $str, 0, $maxLength - \mb_strlen( $appendix, $charset ) ) . $appendix;
+    return substring( $str, 0, $maxLength - \mb_strlen( $appendix, $charset ) ) . $appendix;
 
 }
 
@@ -415,20 +412,20 @@ function strMax( string $str, int $maxLength, string $appendix = '…', string $
 function strIReplace( $search, string $replace, string $subject, bool $useUnicode = true ) : string
 {
 
-   // Make sure $search is a array
-   $search  = (array) $search;
+    // Make sure $search is a array
+    $search  = (array) $search;
 
-   // Quote a search strings for use inside a regular expression
-   /** @noinspection ForeachInvariantsInspection */
-   for ( $i = 0, $j = \count( $search ); $i < $j; $i++ )
-   {
-      $search[ $i ] = \preg_quote( $search[ $i ], '~' );
-   }
+    // Quote a search strings for use inside a regular expression
+    /** @noinspection ForeachInvariantsInspection */
+    for ( $i = 0, $j = \count( $search ); $i < $j; $i++ )
+    {
+        $search[ $i ] = \preg_quote( $search[ $i ], '~' );
+    }
 
-   // Build the regular expression
-   $search = '~(' . \implode( '|', $search ) . ')~i' . ( $useUnicode ? 'u' : '' );
+    // Build the regular expression
+    $search = '~(' . \implode( '|', $search ) . ')~i' . ( $useUnicode ? 'u' : '' );
 
-   return \preg_replace( $search, $replace, $subject );
+    return \preg_replace( $search, $replace, $subject );
 
 }
 
@@ -442,13 +439,13 @@ function strIReplace( $search, string $replace, string $subject, bool $useUnicod
 function stripTags( string $str ) : string
 {
 
-   $search = [
-      '~<' . 'script[^>]*?>.*?</script>~siu',
-      '~<' . 'style[^>]*?>.*?</style>~siu',
-      '~<![\s\S]*?--[ \t\n\r]*>~u'
-   ];
+    $search = [
+        '~<' . 'script[^>]*?>.*?</script>~siu',
+        '~<' . 'style[^>]*?>.*?</style>~siu',
+        '~<![\s\S]*?--[ \t\n\r]*>~u'
+    ];
 
-   return \strip_tags( \preg_replace( $search, '', $str ) );
+    return \strip_tags( \preg_replace( $search, '', $str ) );
 
 }
 
@@ -463,10 +460,10 @@ function stripTags( string $str ) : string
 function print_h( $value, ?string $preClass = null )
 {
 
-   echo '<pre',
-        ( ! empty( $preClass ) ? " class=\"{$preClass}\">" : '>' ),
-        escapeXML( \print_r( $value, true ) ),
-        '</pre>';
+    echo '<pre',
+          ( ! empty( $preClass ) ? " class=\"{$preClass}\">" : '>' ),
+          escapeXML( \print_r( $value, true ) ),
+          '</pre>';
 
 }
 
@@ -480,14 +477,14 @@ function print_h( $value, ?string $preClass = null )
 function splitLines( string $string ) : array
 {
 
-   return \explode(
-      "\n",
-      \str_replace(
-         [ "\r\n", "\r" ],
-         "\n",
-         $string
-      )
-   );
+    return \explode(
+        "\n",
+        \str_replace(
+            [ "\r\n", "\r" ],
+            "\n",
+            $string
+        )
+    );
 
 }
 
@@ -513,23 +510,23 @@ function splitLines( string $string ) : array
 function preg_match_callback( string $pattern, string $subject, ?callable $callback, &$matches = null, $flags = 0, $offset = 0 )
 {
 
-   if ( ! \preg_match( $pattern, $subject, $matches, $flags, $offset ) )
-   {
-      // The base regexp does not match, we are done here...
-      return false;
-   }
+    if ( ! \preg_match( $pattern, $subject, $matches, $flags, $offset ) )
+    {
+        // The base regexp does not match, we are done here...
+        return false;
+    }
 
-   if ( \is_callable( $callback ) )
-   {
+    if ( \is_callable( $callback ) )
+    {
 
-      // $callback is callable, so we can use it (returns boolean)
-      // and it becomes the $matches array from preg_match() as parameter
-      return (bool) $callback( $matches );
+        // $callback is callable, so we can use it (returns boolean)
+        // and it becomes the $matches array from preg_match() as parameter
+        return (bool) $callback( $matches );
 
-   }
+    }
 
-   // Only a successful regexp check
-   return true;
+    // Only a successful regexp check
+    return true;
 
 }
 
@@ -543,12 +540,12 @@ function preg_match_callback( string $pattern, string $subject, ?callable $callb
 function jsonDecode( string $json, bool $assoc = false )
 {
 
-   if ( \preg_match( '~^([a-zA-Z_][a-zA-Z0-9_.]*)?\((.+)\);?$~s', $json, $matches ) )
-   {
-      $json = \trim( $matches[ 2 ] );
-   }
+    if ( \preg_match( '~^([a-zA-Z_][a-zA-Z0-9_.]*)?\((.+)\);?$~s', $json, $matches ) )
+    {
+        $json = \trim( $matches[ 2 ] );
+    }
 
-   return \json_decode( $json, $assoc );
+    return \json_decode( $json, $assoc );
 
 }
 
@@ -559,37 +556,37 @@ function jsonDecode( string $json, bool $assoc = false )
  * @param $errStr
  * @param $errFile
  * @param $errLine
- * @throws \Niirrty\PhpException
+ * @throws PhpException
  */
 function error_handler( $errNo, $errStr, $errFile, $errLine )
 {
 
-   switch ( $errNo )
-   {
+    switch ( $errNo )
+    {
 
-      case \E_NOTICE:
-      case \E_USER_NOTICE:
-      case \E_STRICT:
-         if ( ! \defined('DEBUG') && ! \defined('NIIRRTY_DEBUG') )
-         {
+        case \E_NOTICE:
+        case \E_USER_NOTICE:
+        case \E_STRICT:
+            if ( ! \defined('DEBUG') && ! \defined('NIIRRTY_DEBUG') )
+            {
+                break;
+            }
+            if ( \defined('NIIRRTY_NOTICES_SHOW') )
+            {
+                throw new PhpException( $errStr, $errNo, $errLine, $errFile );
+            }
             break;
-         }
-         if ( \defined('NIIRRTY_NOTICES_SHOW') )
-         {
-            throw new PhpException( $errStr, $errNo, $errLine, $errFile );
-         }
-         break;
 
-      default:
-         // Never trigger a exception if PHPUnits Clover.php raises a error! :-(
-         // This is required for development needs because Clover.php raises a fatal error
-         // while using the bad error hiding @ operator in combination with mkdir.
-         if ( ! \Niirrty\strEndsWith( $errFile, 'Clover.php' ) )
-         {
-            throw new PhpException( $errStr, $errNo, $errLine, $errFile );
-         }
+        default:
+            // Never trigger a exception if PHPUnits Clover.php raises a error! :-(
+            // This is required for development needs because Clover.php raises a fatal error
+            // while using the bad error hiding @ operator in combination with mkdir.
+            if ( ! strEndsWith( $errFile, 'Clover.php' ) )
+            {
+                throw new PhpException( $errStr, $errNo, $errLine, $errFile );
+            }
 
-   }
+    }
 
 }
 

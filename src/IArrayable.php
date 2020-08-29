@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  (c) 2017, Niirrty
+ * @copyright  © 2017, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.2.0
+ * @version        0.3.0
  */
 
 
@@ -23,12 +23,12 @@ interface IArrayable
 {
 
 
-   /**
-    * Returns all instance data as an associative array.
-    *
-    * @return array
-    */
-   public function toArray() : array;
+    /**
+     * Returns all instance data as an associative array.
+     *
+     * @return array
+     */
+    public function toArray() : array;
 
 
 }

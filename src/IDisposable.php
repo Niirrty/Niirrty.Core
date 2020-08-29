@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  (c) 2017, Niirrty
+ * @copyright  © 2017, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.2.0
+ * @version        0.3.0
  */
 
 
@@ -26,17 +26,17 @@ namespace Niirrty;
 interface IDisposable
 {
 
-   /**
-    * Gets if the instance is already disposed.
-    *
-    * @return bool
-    */
-   public function disposed() : bool;
+    /**
+     * Gets if the instance is already disposed.
+     *
+     * @return bool
+     */
+    public function disposed() : bool;
 
-   /**
-    * Disposes the instance
-    */
-   public function __destruct();
+    /**
+     * Disposes the instance
+     */
+    public function __destruct();
 
 }
 

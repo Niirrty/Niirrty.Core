@@ -10,7 +10,11 @@
       }
    ],
    "require": {
-      "php": ">=7.1"
+      "php": ">=7.1",
+     "ext-json": "*",
+     "ext-dom": "*",
+     "ext-mbstring": "*",
+     "ext-simplexml": "*"
    },
    "require-dev": {
       "phpunit/phpunit": "7.*",

@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  (c) 2017, Niirrty
+ * @copyright  © 2017, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.2.0
+ * @version        0.3.0
  */
 
 
@@ -19,16 +19,16 @@ namespace Niirrty;
  *
  * @package UK
  */
-Interface IStringable
+interface IStringable
 {
 
 
-   /**
-    * Gets the string representation of the instance data for implementing class.
-    *
-    * @return string
-    */
-   public function __toString();
+    /**
+     * Gets the string representation of the instance data for implementing class.
+     *
+     * @return string
+     */
+    public function __toString();
 
 
 }
