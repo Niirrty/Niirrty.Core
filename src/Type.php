@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  © 2017, Niirrty
+ * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.3.0
+ * @version        0.4.0
  */
 
 
@@ -21,85 +21,78 @@ class Type
 {
 
 
-    // <editor-fold desc="// – – –   P R I V A T E   F I E L D S   – – – – – – – – – – – – – – – – – – – – – – – –">
-
-    /**
-     * The value.
-     *
-     * @var mixed
-     */
-    private $value;
+    #region // – – –   P R I V A T E   F I E L D S   – – – – – – – – – – – – – – – – – – – – – – – –
 
     /**
      * Defines if the value is convertible to a string.
      *
      * @var boolean
      */
-    private $isStringConvertible;
+    private bool $isStringConvertible;
 
     /**
      * The string value associate with the base value.
      *
-     * @var string
+     * @var string|null
      */
-    private $stringValue;
+    private ?string $stringValue;
 
     /**
      * The name of the base value type.
      *
      * @var string
      */
-    private $typeName;
+    private string $typeName;
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// – – –   C L A S S   C O N S T A N T S   – – – – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   C L A S S   C O N S T A N T S   – – – – – – – – – – – – – – – – – – – – – – –
 
     /**
      * The PHP type of float values.
      */
-    const PHP_FLOAT = 'float';
+    public const PHP_FLOAT  = 'float';
 
     /**
      * The PHP type of integer values.
      */
-    const PHP_INTEGER = 'int';
+    public const PHP_INTEGER = 'int';
 
     /**
      * The PHP type of boolean values.
      */
-    const PHP_BOOLEAN = 'bool';
+    public const PHP_BOOLEAN = 'bool';
 
     /**
      * The PHP type of string values.
      */
-    const PHP_STRING = 'string';
+    public const PHP_STRING = 'string';
 
     /**
      * The PHP type of NULL values.
      */
-    const PHP_NULL = 'null';
+    public const PHP_NULL = 'null';
 
     /**
      * The PHP type of resource values.
      */
-    const PHP_RESOURCE = 'resource';
+    public const PHP_RESOURCE = 'resource';
 
     /**
      * The PHP type of array values.
      */
-    const PHP_ARRAY = 'array';
+    public const PHP_ARRAY = 'array';
 
     /**
      * All other unknown types
      */
-    const PHP_UNKNOWN = 'unknown';
+    public const PHP_UNKNOWN = 'unknown';
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// – – –   P U B L I C   C O N S T R U C T O R   – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   P U B L I C   C O N S T R U C T O R   – – – – – – – – – – – – – – – – – – – –
 
     /**
      * Init a new instance.
@@ -107,10 +100,9 @@ class Type
      * @param  mixed $value The base value.
      * @throws NiirrtyException If $value is of type {@see Type}
      */
-    public function __construct( $value )
+    public function __construct( private mixed $value )
     {
 
-        $this->value               = $value;
         $this->isStringConvertible = TypeTool::IsStringConvertible( $value, $this->stringValue );
 
         if ( ! $this->isStringConvertible )
@@ -159,10 +151,10 @@ class Type
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// – – –   P U B L I C   M E T H O D S   – – – – – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   P U B L I C   M E T H O D S   – – – – – – – – – – – – – – – – – – – – – – – –
 
     /**
      * Checks if the current instance is equal to defined value. If strict is FALSE only the value is checked.
@@ -173,7 +165,7 @@ class Type
      * @return boolean         TRUE oder FALSE
      * @throws NiirrtyException
      */
-    public function equals( $value, bool $strict = false ) : bool
+    public function equals( mixed $value, bool $strict = false ) : bool
     {
 
         if ( ! ( $value instanceof Type ) )
@@ -186,7 +178,7 @@ class Type
 
         if ( ! $res && $strict )
         {
-            return $res;
+            return false;
         }
 
         if ( $value->isStringConvertible )
@@ -203,7 +195,7 @@ class Type
      *
      * @return mixed
      */
-    public final function getValue()
+    public final function getValue(): mixed
     {
 
         return $this->value;
@@ -273,7 +265,7 @@ class Type
     public function __toString() : string
     {
 
-        return (string) ( $this->stringValue ?? '' );
+        return ( $this->stringValue ?? '' );
 
     }
 
@@ -367,7 +359,7 @@ class Type
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
 }

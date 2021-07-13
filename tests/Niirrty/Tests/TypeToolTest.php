@@ -166,9 +166,9 @@ class TypeToolTest extends TestCase
         $this->assertSame( [ '[abc-def>d]' ], TypeTool::StrToType( '[abc-def>d]', 'array' ) );
         $this->assertSame( [ 'a:bc-def' ], TypeTool::StrToType( 'a:bc-def', 'array' ) );
         $this->assertSame( [ '{abc-def>d}' ], TypeTool::StrToType( '{abc-def>d}', 'array' ) );
-        $ser = new Serializeable( '2017-12-24 12:00:00' );
-        $tmp = \serialize( $ser );
-        $this->assertEquals( $ser, TypeTool::StrToType( $tmp, 'Niirrty\\Tests\\Fixtures\\Serializeable' ) );
+        //$ser = new Serializeable( '2017-12-24 12:00:00' );
+        //$tmp = \serialize( $ser );
+        //$this->assertEquals( $ser, TypeTool::StrToType( $tmp, 'Niirrty\\Tests\\Fixtures\\Serializeable' ) );
         $this->assertSame( null, TypeTool::StrToType( '', '\DateTime' ) );
         $this->assertSame( null, TypeTool::StrToType( 'ab', '\DateTime' ) );
 

@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  © 2017, Niirrty
+ * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.3.0
+ * @version        0.4.0
  */
 
 
@@ -98,7 +98,7 @@ function strPos( string $str, string $needle, bool $caseLess = false, string $ch
  * @param  string $needle   The sub string to locate in $str
  * @param  bool   $caseLess Ignore the case? (defaults to FALSE)
  * @param  string $charset  Encoding of the string (defaults to 'UTF-8')
- * @return integer|FALSE    Returns the resulting index, or boolean FALSE if not found.
+ * @return integer Returns the resulting index, or -1 if not found.
  * @uses   Multi byte extension The function requires that PHP have the Multi byte extension mb_string enabled.
  * @since  v0.1
  */
@@ -177,6 +177,8 @@ function strPositions( string $str, string $needle, bool $caseLess = false, stri
 /**
  * Returns, if $str starts with $needle.
  *
+ * The function will not been deprecated because PHP 8.0+ new function str_starts_with() not supports caseless check
+ *
  * @param  string  $str      The string to check.
  * @param  string  $needle   The string, where $str must starts with
  * @param  boolean $caseLess Ignore the case? (defaults to FALSE)
@@ -195,6 +197,8 @@ function strStartsWith( string $str, string $needle, bool $caseLess = false, str
 
 /**
  * Returns, if $str ends with $needle.
+ *
+ * The function will not been deprecated because PHP 8.0+ new function str_ends_with() not supports caseless check
  *
  * @param  string  $str      The string to check.
  * @param  string  $needle   The string, where $str must ends with
@@ -226,6 +230,8 @@ function strEndsWith( string $str, string $needle, bool $caseLess = false, strin
 /**
  * Returns, if $str contains $needle.
  *
+ * The function will not been deprecated because PHP 8.0+ new function str_contains() not supports caseless check
+ *
  * @param  string  $str      The string to check.
  * @param  string  $needle   he string, where $str must contains
  * @param  boolean $caseLess Ignore the case? (defaults to FALSE)
@@ -252,7 +258,7 @@ function strContains( string $str, string $needle, bool $caseLess = false, strin
 function escapeXML( string $str ) : string
 {
 
-    return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1, 'UTF-8' ) );
+    return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1 ) );
 
 }
 
@@ -266,7 +272,7 @@ function escapeXML( string $str ) : string
 function escapeXMLArg( string $str ) : string
 {
 
-    return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1|\ENT_QUOTES, 'UTF-8' ) );
+    return \preg_replace( '~[\x00-\x1f]+~','', \htmlspecialchars( $str, \ENT_XML1|\ENT_QUOTES ) );
 
 }
 
@@ -282,25 +288,16 @@ function escapeXMLArg( string $str ) : string
  * @uses   \Niirrty\escapeXMLArg
  * @since  v0.1
  */
-function escape( string $str, $type = ESCAPE_HTML_ALL ) : string
+function escape( string $str, string $type = ESCAPE_HTML_ALL ) : string
 {
 
-    switch ( $type )
+    return match ( $type )
     {
-
-        case ESCAPE_HTML:
-            return escapeXML( $str );
-
-        case ESCAPE_URL:
-            return \urlencode( $str );
-
-        case ESCAPE_JSON:
-            return \json_encode( $str );
-
-        default:
-            return escapeXMLArg( $str );
-
-    }
+        ESCAPE_HTML => escapeXML( $str ),
+        ESCAPE_URL  => \urlencode( $str ),
+        ESCAPE_JSON => \json_encode( $str ),
+        default     => escapeXMLArg( $str ),
+    };
 
 }
 
@@ -402,14 +399,15 @@ function strMax( string $str, int $maxLength, string $appendix = '…', string $
 /**
  * str_replace with a case-less string handling.
  *
- * @param  string|array $search     What will be replaced?
- * @param  string       $replace    The Replacement
- * @param  string       $subject    The String to work with
- * @param  boolean      $useUnicode Use Unicode for internal regex? (defaults to TRUE)
+ * @param array|string $search     What will be replaced?
+ * @param  string      $replace    The Replacement
+ * @param  string      $subject    The String to work with
+ * @param  boolean     $useUnicode Use Unicode for internal regex? (defaults to TRUE)
+ *
  * @return string
  * @since  v0.1
  */
-function strIReplace( $search, string $replace, string $subject, bool $useUnicode = true ) : string
+function strIReplace( array|string $search, string $replace, string $subject, bool $useUnicode = true ) : string
 {
 
     // Make sure $search is a array
@@ -457,7 +455,7 @@ function stripTags( string $str ) : string
  * @uses   \Niirrty\escapeXML
  * @since  v0.1
  */
-function print_h( $value, ?string $preClass = null )
+function print_h( mixed $value, ?string $preClass = null )
 {
 
     echo '<pre',
@@ -494,20 +492,22 @@ function splitLines( string $string ) : array
  *
  * @param  string   $pattern  The PHP typical PCRE regular expression that does the main check.
  * @param  string   $subject  The string that should be checked
- * @param  callable $callback The callback function for doing special checks with the matching groups of $patter.
- *                            Function signature must be "boolean function( array $matches )"
- * @param  array    $matches  It returns the resulting matches if the $pattern hits successful the $subject
- * @param  integer  $flags    can be the following flag:
- *                            PREG_OFFSET_CAPTURE: If this flag is passed, for every occurring match the appended
- *                            string offset will also be returned. Note that this changes the value of matches into an
- *                            array where every element is an array consisting of the matched string at offset 0 and
- *                            its string offset into subject at offset 1.
+ * @param  callable|null $callback The callback function for doing special checks with the matching groups of $patter.
+ *                                 Function signature must be "boolean function( array $matches )"
+ * @param  array|null $matches  It returns the resulting matches if the $pattern hits successful the $subject
+ * @param  integer   $flags    can be the following flag:
+ *                             PREG_OFFSET_CAPTURE: If this flag is passed, for every occurring match the appended
+ *                             string offset will also be returned. Note that this changes the value of matches into an
+ *                             array where every element is an array consisting of the matched string at offset 0 and
+ *                             its string offset into subject at offset 1.
  * @param  integer $offset    Normally, the search starts from the beginning of the subject string. The optional
  *                            parameter offset can be used to specify the alternate place from which to start the
  *                            search (in bytes).
  * @return boolean            Returns if the $pattern and $callback matches successful for $subject.
  */
-function preg_match_callback( string $pattern, string $subject, ?callable $callback, &$matches = null, $flags = 0, $offset = 0 )
+function preg_match_callback(
+    string $pattern, string $subject, ?callable $callback, ?array &$matches = null, int $flags = 0, int $offset = 0 )
+: bool
 {
 
     if ( ! \preg_match( $pattern, $subject, $matches, $flags, $offset ) )
@@ -537,7 +537,7 @@ function preg_match_callback( string $pattern, string $subject, ?callable $callb
  * @param  boolean $assoc
  * @return mixed
  */
-function jsonDecode( string $json, bool $assoc = false )
+function jsonDecode( string $json, bool $assoc = false ) : mixed
 {
 
     if ( \preg_match( '~^([a-zA-Z_][a-zA-Z0-9_.]*)?\((.+)\);?$~s', $json, $matches ) )

@@ -1,10 +1,10 @@
 <?php
 /**
- * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  © 2017, Niirrty
- * @package        Niirrty
- * @since          2017-10-30
- * @version        0.3.0
+ * @author     Ni Irrty <niirrty+code@gmail.com>
+ * @copyright  © 2017-2021, Niirrty
+ * @package    Niirrty
+ * @since      2017-10-30
+ * @version    0.4.0
  */
 
 
@@ -21,38 +21,31 @@ class ArgumentException extends NiirrtyException
 {
 
 
-    // <editor-fold desc="// – – –   P R O T E C T E D   F I E L D S   – – – – – – – – – – – – – – – – – – – – – –">
-
-    /**
-     * The argument name.
-     *
-     * @var string
-     */
-    protected $_argumentName;
+    #region // – – –   P R O T E C T E D   F I E L D S   – – – – – – – – – – – – – – – – – – – – – –
 
     /**
      * The function or method name.
      *
      * @var string
      */
-    protected $_functionName;
+    protected string $functionName;
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// – – –   P U B L I C   C O N S T R U C T O R   – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   P U B L I C   C O N S T R U C T O R   – – – – – – – – – – – – – – – – – – – –
 
     /**
      * Init a new instance.
      *
-     * @param string          $argName  The argument/parameter name
+     * @param string          $argumentName  The argument/parameter name
      * @param mixed           $argValue The argument/parameter value
      * @param string|null     $message  The error message (default=null)
      * @param int|string      $code     The error code (default=\E_USER_ERROR)
      * @param \Throwable|null $previous A optional previous exception
      */
     public function __construct(
-        string $argName, $argValue, ?string $message = null, $code = 256, ?\Throwable $previous = null )
+        protected string $argumentName, mixed $argValue, ?string $message = null, int|string $code = 256, ?\Throwable $previous = null )
     {
 
         // Getting the debug backtrace to find out the method/function that is called with an bad argument.
@@ -63,12 +56,12 @@ class ArgumentException extends NiirrtyException
 
         // Getting the method or function name.
         $fn = ( empty( $trace[ $lIdx ][ 'class' ] )    ? '' : $trace[ $lIdx ][ 'class' ] )
-             . ( empty( $trace[ $lIdx ][ 'type' ] )     ? '' : $trace[ $lIdx ][ 'type' ] )
-             . ( empty( $trace[ $lIdx ][ 'function' ] ) ? '' : $trace[ $lIdx ][ 'function' ] );
+            . ( empty( $trace[ $lIdx ][ 'type' ] )     ? '' : $trace[ $lIdx ][ 'type' ] )
+            . ( empty( $trace[ $lIdx ][ 'function' ] ) ? '' : $trace[ $lIdx ][ 'function' ] );
 
         // Init with parent constructor
         parent::__construct(
-            'Argument $' . \ltrim( $argName, '$' )
+            'Argument $' . \ltrim( $argumentName, '$' )
             .  ( empty( $fn ) ? '' : ' of ' . $fn . '(…)' )
             .  ' is Invalid! It uses a value of type '
             .  static::GetTypeStr( $argValue )
@@ -77,16 +70,14 @@ class ArgumentException extends NiirrtyException
             $previous
         );
 
-        // Remember the parameter name and the function/method name
-        $this->_argumentName = $argName;
-        $this->_functionName = $fn;
+        $this->functionName = $fn;
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// – – –   P U B L I C   M E T H O D S   – – – – – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   P U B L I C   M E T H O D S   – – – – – – – – – – – – – – – – – – – – – – – –
 
     /**
      * Returns the name of the error argument/parameter.
@@ -96,7 +87,7 @@ class ArgumentException extends NiirrtyException
     public final function getArgumentName() : string
     {
 
-        return $this->_argumentName;
+        return $this->argumentName;
 
     }
 
@@ -108,14 +99,14 @@ class ArgumentException extends NiirrtyException
     public final function getFunctionName() : string
     {
 
-        return $this->_functionName;
+        return $this->functionName;
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// – – –   P R O T E C T E D   S T A T I C   M E T H O D S   – – – – – – – – – – – – – –">
+    #region // – – –   P R O T E C T E D   S T A T I C   M E T H O D S   – – – – – – – – – – – – – –">
 
     /**
      * Returns a string, representing the permitted value.
@@ -123,7 +114,7 @@ class ArgumentException extends NiirrtyException
      * @param  mixed $value
      * @return string
      */
-    protected static function GetTypeStr( $value ) : string
+    protected static function GetTypeStr( mixed $value ) : string
     {
 
         if ( null === $value )
@@ -177,9 +168,8 @@ class ArgumentException extends NiirrtyException
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
 }
-
 

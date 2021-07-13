@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  © 2017, Niirrty
+ * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2020-08-27
- * @version        0.3.0
+ * @version        0.4.0
  */
 
 
@@ -21,19 +21,19 @@ class OperationNotSupportedException extends NiirrtyException
 {
 
 
-    // <editor-fold desc="// – – –   P R O T E C T E D   F I E L D S   – – – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   P R O T E C T E D   F I E L D S   – – – – – – – – – – – – – – – – – – – – – –
 
     /**
      * The function or method name.
      *
      * @var string
      */
-    protected $_functionName;
+    protected string $_functionName;
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// – – –   P U B L I C   C O N S T R U C T O R   – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   P U B L I C   C O N S T R U C T O R   – – – – – – – – – – – – – – – – – – – –
 
     /**
      * Init a new instance.
@@ -43,7 +43,7 @@ class OperationNotSupportedException extends NiirrtyException
      * @param \Throwable|null $previous A optional previous exception
      */
     public function __construct(
-        string $message = null, $code = 256, ?\Throwable $previous = null )
+        string $message = null, int|string $code = 256, ?\Throwable $previous = null )
     {
 
         // Getting the debug backtrace to find out the method/function that is called with an bad argument.
@@ -51,8 +51,6 @@ class OperationNotSupportedException extends NiirrtyException
 
         // Getting the index of the last trace element.
         $lIdx  = \count( $trace ) - 1;
-
-        $foo = 10;
 
         // Getting the method or function name.
         $this->_functionName = ( empty( $trace[ $lIdx ][ 'class' ] )    ? '' : $trace[ $lIdx ][ 'class' ] )
@@ -71,10 +69,10 @@ class OperationNotSupportedException extends NiirrtyException
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// – – –   P U B L I C   M E T H O D S   – – – – – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   P U B L I C   M E T H O D S   – – – – – – – – – – – – – – – – – – – – – – – –
 
     /**
      * Returns the value of the error argument/parameter.
@@ -88,7 +86,7 @@ class OperationNotSupportedException extends NiirrtyException
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
 }

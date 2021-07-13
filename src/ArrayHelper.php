@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  © 2017, Niirrty
+ * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.3.0
+ * @version        0.4.0
  */
 
 
@@ -21,7 +21,7 @@ abstract class ArrayHelper
 {
 
 
-    // <editor-fold desc="// – – –   P U B L I C   S T A T I C   M E T H O D S   – – – – – – – – – – – – – – – – –">
+    #region // – – –   P U B L I C   S T A T I C   M E T H O D S   – – – – – – – – – – – – – – – – –
 
     /**
      * Extracts some associative array data from a XML attribute format string. (e.g.: a="20")
@@ -116,7 +116,7 @@ abstract class ArrayHelper
                 return $attributes;
             }
         }
-        catch ( \Throwable $ex )
+        catch ( \Throwable )
         {
             return $attributes;
         }
@@ -131,8 +131,8 @@ abstract class ArrayHelper
         for ( $i = 0; $i < $attributeNodes->length; $i++ )
         {
             $attr = $attributeNodes->item( $i );
-            $key = (string) $attr->nodeName;
-            $attributes[ $key ] = (string) $attr->nodeValue;
+            $key  = $attr->nodeName;
+            $attributes[ $key ] = $attr->nodeValue;
             // Convert the value to boolean if required and if it makes sense
             if ( $autoBoolean )
             {
@@ -249,7 +249,7 @@ abstract class ArrayHelper
      * @param  integer $index   The index of the new element. If lower than 0, 0 is used. If to large its appended to the end.
      * @return array
      */
-    public static function Insert( array $array, $element, int $index ) : array
+    public static function Insert( array $array, mixed $element, int $index ) : array
     {
 
         $cnt = \count( $array );
@@ -437,9 +437,9 @@ abstract class ArrayHelper
     /**
      * Extracts all elements beginning at element with index $startIndex with defined length/count (or to the end)
      *
-     * @param  array   $array      The array
-     * @param  integer $startIndex The index of the element where extraction starts
-     * @param  integer $length     The optional lenght/count of required array elements (default=null mens to the end)
+     * @param array    $array      The array
+     * @param integer  $startIndex The index of the element where extraction starts
+     * @param int|null $length     The optional lenght/count of required array elements (default=null mens to the end)
      * @return array
      */
     public static function Extract( array $array, int $startIndex, int $length = null ) : array
@@ -476,7 +476,7 @@ abstract class ArrayHelper
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
 }

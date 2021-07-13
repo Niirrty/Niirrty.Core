@@ -1,10 +1,10 @@
 <?php
 /**
  * @author         Ni Irrty <niirrty+code@gmail.com>
- * @copyright  © 2017, Niirrty
+ * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.3.0
+ * @version        0.4.0
  */
 
 
@@ -12,6 +12,9 @@ declare( strict_types = 1 );
 
 
 namespace Niirrty;
+
+
+use JetBrains\PhpStorm\Pure;
 
 
 /**
@@ -23,44 +26,40 @@ class NiirrtyException extends \Exception
 {
 
 
-    // <editor-fold desc="// – – –   P R O T E C T E D   F I E L D S   – – – – – – – – – – – – – – – – – – – – – –">
+    #region // – – –   P R O T E C T E D   F I E L D S   – – – – – – – – – – – – – – – – – – – – – –
 
     /**
      * The back trace.
      *
      * @type array
      */
-    protected $_trace;
+    protected array $_trace;
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// = = = =   P U B L I C   C O N S T R U C T O R   = = = = = = = = = = = = = = = = = = = = =">
+    #region // = = = =   P U B L I C   C O N S T R U C T O R   = = = = = = = = = = = = = = = = = = = = =
 
     /**
      * Init a new NiirrtyException instance.
      *
      * @param string          $message  The error message.
-     * @param int             $code     The optional error code.
+     * @param string|int      $code     The optional error code.
      * @param \Throwable|null $previous Optional previous throwable.
      */
-    public function __construct ( string $message, $code = 0, \Throwable $previous = null )
+    public function __construct ( string $message, string|int $code = 0, ?\Throwable $previous = null )
     {
 
-        parent::__construct(
-            $message,
-            $code,
-            $previous
-        );
+        parent::__construct( $message, $code, $previous );
 
         $this->_trace  = \debug_backtrace();
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// = = = =   P U B L I C   M E T H O D S   = = = = = = = = = = = = = = = = = = = = = = = = =">
+    #region // = = = =   P U B L I C   M E T H O D S   = = = = = = = = = = = = = = = = = = = = = = = = =
 
     /**
      * Overrides __toString, to return a more detailed string, when object is casted to a string.
@@ -79,7 +78,7 @@ class NiirrtyException extends \Exception
      *
      * @return bool
      */
-    public final function hasPrevious() : bool
+    #[Pure] public final function hasPrevious() : bool
     {
 
         return null !== $this->getPrevious();
@@ -194,10 +193,10 @@ class NiirrtyException extends \Exception
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// = = = =   P U B L I C   S T A T I C   M E T H O D S   = = = = = = = = = = = = = = = = = =">
+    #region // = = = =   P U B L I C   S T A T I C   M E T H O D S   = = = = = = = = = = = = = = = = = =
 
     /**
      * Returns a string, representing the defined error code.
@@ -205,7 +204,7 @@ class NiirrtyException extends \Exception
      * @param  int|string $code e.g.: \E_USER_ERROR
      * @return string
      */
-    public static function GetCodeName( $code ) : string
+    public static function GetCodeName( int|string $code ) : string
     {
 
         switch ( $code )
@@ -247,25 +246,25 @@ class NiirrtyException extends \Exception
 
     }
 
-    // </editor-fold>
+    #endregion
 
 
-    // <editor-fold desc="// = = = =   P R O T E C T E D   S T A T I C   M E T H O D S   = = = = = = = = = = = = = = =">
+    #region // = = = =   P R O T E C T E D   S T A T I C   M E T H O D S   = = = = = = = = = = = = = = =
 
     /**
      * Appends a message, if its not empty, separated by ' '.
      *
-     * @param  string $message
+     * @param  string|null $message
      * @return string
      */
-    protected static function appendMessage( $message ) : string
+    protected static function appendMessage( ?string $message ) : string
     {
 
         return empty( $message ) ? '' : ( ' ' . $message );
 
     }
 
-    # </editor-fold>
+    #endregion
 
 
 }
