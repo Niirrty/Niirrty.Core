@@ -14,9 +14,6 @@ declare( strict_types = 1 );
 namespace Niirrty;
 
 
-use JetBrains\PhpStorm\Pure;
-
-
 /**
  * This is the Niirrty library wide base exception.
  *
@@ -78,7 +75,7 @@ class NiirrtyException extends \Exception
      *
      * @return bool
      */
-    #[Pure] public final function hasPrevious() : bool
+    public final function hasPrevious() : bool
     {
 
         return null !== $this->getPrevious();
