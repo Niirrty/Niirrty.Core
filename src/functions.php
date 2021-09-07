@@ -4,7 +4,7 @@
  * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.4.0
+ * @version        0.5.0
  */
 
 
@@ -21,7 +21,6 @@ const ESCAPE_HTML_ALL = 'html_all';
 const ESCAPE_HTML     = 'html';
 const ESCAPE_URL      = 'url';
 const ESCAPE_JSON     = 'json';
-
 
 
 /**
@@ -182,16 +181,20 @@ function strPositions( string $str, string $needle, bool $caseLess = false, stri
  * @param  string  $str      The string to check.
  * @param  string  $needle   The string, where $str must starts with
  * @param  boolean $caseLess Ignore the case? (defaults to FALSE)
- * @param  string  $charset  Encoding of the string (defaults to 'UTF-8')
+ * @param string $charset    @deprecated The charset is now always the charset, configured by PHP config.
+ *                           The parameter will be deleted in v0.6
+ *
  * @return bool              Returns TRUE on success, FALSE otherwise.
- * @uses   Multi byte extension The function requires that PHP have the Multi byte extension mb_string enabled.
- * @uses   \Niirrty\strPos
+ * @uses   Multibyte-PHP-Extension The function requires that PHP have the Multi byte extension mb_string enabled.
  * @since  v0.1
+ * @noinspection PhpUnusedParameterInspection
  */
 function strStartsWith( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8' ) : bool
 {
 
-    return ( 0 === strPos( $str, $needle, $caseLess, $charset ) );
+    return \str_starts_with(
+        $caseLess ? \mb_strtolower( $str ) : $str,
+        $caseLess ? \mb_strtolower( $needle ) : $needle );
 
 }
 
@@ -203,27 +206,19 @@ function strStartsWith( string $str, string $needle, bool $caseLess = false, str
  * @param  string  $str      The string to check.
  * @param  string  $needle   The string, where $str must ends with
  * @param  boolean $caseLess Ignore the case? (defaults to FALSE)
- * @param  string  $charset  Encoding of the string (defaults to 'UTF-8')
+ * @param  string  $charset  @deprecated The charset is now always the charset, configured by PHP config.
+ *                           The parameter will be deleted in v0.6
  * @return boolean Returns TRUE on success, FALSE otherwise.
- * @uses   Multi byte extension The function requires that PHP have the Multi byte extension mb_string enabled.
- * @uses   \Niirrty\strLastPos
+ * @uses   Multibyte-PHP-Extension The function requires that PHP have the Multi byte extension mb_string enabled.
  * @since  v0.1
+ * @noinspection PhpUnusedParameterInspection
  */
 function strEndsWith( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8' ) : bool
 {
 
-
-    // Getting the lengths of $needle and $str
-    $needleLength = \mb_strlen( $needle, $charset );
-    $stringLength = \mb_strlen( $str, $charset );
-
-    // If $needle is empty, or if $needle is longer than $str, return FALSE
-    if ( ( $needleLength < 1 ) || ( $stringLength < $needleLength ) )
-    {
-        return false;
-    }
-
-    return ( ( $stringLength - $needleLength ) === strLastPos( $str, $needle, $caseLess, $charset ) );
+    return \str_ends_with(
+        $caseLess ? \mb_strtolower( $str ) : $str,
+        $caseLess ? \mb_strtolower( $needle ) : $needle );
 
 }
 
@@ -235,16 +230,19 @@ function strEndsWith( string $str, string $needle, bool $caseLess = false, strin
  * @param  string  $str      The string to check.
  * @param  string  $needle   he string, where $str must contains
  * @param  boolean $caseLess Ignore the case? (defaults to FALSE)
- * @param  string  $charset  Encoding of the string (defaults to 'UTF-8')
+ * @param  string  $charset  @deprecated The charset is now always the charset, configured by PHP config.
+ *                           The parameter will be deleted in v0.6
  * @return boolean Returns TRUE on success, FALSE otherwise.
- * @uses   Multi byte extension The function requires that PHP have the Multi byte extension mb_string enabled.
- * @uses   \Niirrty\strPos
+ * @uses   Multibyte-PHP-Extension The function requires that PHP have the Multi byte extension mb_string enabled.
  * @since  v0.1
+ * @noinspection PhpUnusedParameterInspection
  */
 function strContains( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8' ) : bool
 {
 
-    return ( -1 !== strPos( $str, $needle, $caseLess, $charset ) );
+    return \str_contains(
+        $caseLess ? \mb_strtolower( $str ) : $str,
+        $caseLess ? \mb_strtolower( $needle ) : $needle );
 
 }
 
@@ -503,7 +501,18 @@ function splitLines( string $string ) : array
  * @param  integer $offset    Normally, the search starts from the beginning of the subject string. The optional
  *                            parameter offset can be used to specify the alternate place from which to start the
  *                            search (in bytes).
+ *
  * @return boolean            Returns if the $pattern and $callback matches successful for $subject.
+ * @example <code>
+ * $isMatch = \Niirrty\preg_match_callback(
+ *     '~^(\\d+)(A-F]+)(\\d+)$~i',
+ *     '999FF001',
+ *     function( array $matches )
+ *     {
+ *         return ( \intval( $matches[ 1 ] ) + \intval( $matches[ 3 ] ) ) > 999;
+ *     }
+ * );
+ * </code>
  */
 function preg_match_callback(
     string $pattern, string $subject, ?callable $callback, ?array &$matches = null, int $flags = 0, int $offset = 0 )
@@ -550,6 +559,44 @@ function jsonDecode( string $json, bool $assoc = false ) : mixed
 }
 
 /**
+ * Generates a unique GUID with format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (36 characters long)
+ *
+ * @return string
+ * @since v0.5.0
+ */
+function generateGUID() : string
+{
+
+    if ( true === \function_exists( '\\com_create_guid' ) )
+    {
+        /** @noinspection PhpUndefinedFunctionInspection */
+        return \trim( \com_create_guid(), '{}+' );
+    }
+
+    if ( true === \function_exists( '\\openssl_random_pseudo_bytes' ) )
+    {
+        /** @noinspection PhpComposerExtensionStubsInspection */
+        $data = \openssl_random_pseudo_bytes( 16 );
+        $data[ 6 ] = \chr( \ord( $data[ 6 ] ) & 0x0f | 0x40 );
+        $data[ 8 ] = \chr( \ord( $data[ 8 ] ) & 0x3f | 0x80 );
+
+        return \trim( \vsprintf( '%s%s-%s-%s-%s-%s%s%s', \str_split( \bin2hex( $data ), 4 ) ), '+' );
+    }
+
+    return \trim( \sprintf(
+        '%04X%04X-%04X-%04X-%04X-%04X%04X%04X',
+        \mt_rand(0, 65535),
+        \mt_rand(0, 65535),
+        \mt_rand(0, 65535),
+        \mt_rand(16384, 20479),
+        \mt_rand(32768, 49151),
+        \mt_rand(0, 65535),
+        \mt_rand(0, 65535),
+        \mt_rand(0, 65535) ), '+' );
+
+}
+
+/**
  * @internal
  * @access private
  * @param $errNo
@@ -590,4 +637,8 @@ function error_handler( $errNo, $errStr, $errFile, $errLine )
 
 }
 
-\set_error_handler( '\\Niirrty\\error_handler' );
+if ( ! \defined( 'NIIRRTY_NO_ERROR_HANDLER' ) )
+{
+    \set_error_handler( '\\Niirrty\\error_handler' );
+}
+

@@ -4,7 +4,7 @@
  * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.4.0
+ * @version        0.5.0
  */
 
 
@@ -36,6 +36,26 @@ abstract class ArrayHelper
      * @return array
      */
     public static function ParseAttributes(
+        string $attributeStr, bool $lowerKeys = false, bool $autoBoolean = true ) : array
+    {
+
+        return static::ParseXmlAttributes( $attributeStr, $lowerKeys, $autoBoolean );
+
+    }
+
+    /**
+     * Extracts some associative array data from a XML attribute format string. (e.g.: a="20")
+     *
+     * Entities are auto converted to unicode UTF-8 characters!
+     *
+     * yes|no|on|off|true|false will be converted automatically to a boolean value.
+     *
+     * @param  string  $attributeStr The XML attribute string to parse.
+     * @param  boolean $lowerKeys    Convert all keys (attribute names) to lower case? (defaults to FALSE)
+     * @param  boolean $autoBoolean  Auto convert the values yes|no|on|off|true|false to boolean? (defaults to TRUE)
+     * @return array
+     */
+    public static function ParseXmlAttributes(
         string $attributeStr, bool $lowerKeys = false, bool $autoBoolean = true ) : array
     {
 

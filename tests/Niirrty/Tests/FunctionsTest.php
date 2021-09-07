@@ -13,6 +13,7 @@ namespace Niirrty\Tests;
 
 use Niirrty\ArgumentException;
 use function Niirrty\escape;
+use function Niirrty\generateGUID;
 use const Niirrty\ESCAPE_HTML;
 use const Niirrty\ESCAPE_HTML_ALL;
 use const Niirrty\ESCAPE_JSON;
@@ -93,7 +94,7 @@ class FunctionsTest extends TestCase
         $this->assertTrue( strEndsWith( 'øØæÆ', 'Æ' ) );
         $this->assertFalse( strEndsWith( 'øØæÆ', 'æ' ) );
         $this->assertTrue( strEndsWith( 'øØæÆ', 'æ', true ) );
-        $this->assertFalse( strEndsWith( 'øØæÆ', '', true ) );
+        $this->assertTrue( strEndsWith( 'øØæÆ', '', true ) );
         $this->assertFalse( strEndsWith( 'øØæÆ', 'øØæÆæ', true ) );
 
     }
@@ -104,7 +105,7 @@ class FunctionsTest extends TestCase
         $this->assertTrue( strContains( 'øØæÆ', 'ø' ) );
         $this->assertFalse( strContains( 'øæÆ', 'Ø' ) );
         $this->assertTrue( strContains( 'øæÆ', 'Ø', true ) );
-        $this->assertFalse( strContains( 'øØæÆ', '' ) );
+        $this->assertTrue( strContains( 'øØæÆ', '' ) );
 
     }
 
@@ -233,7 +234,20 @@ class FunctionsTest extends TestCase
 
     }
 
+    public function testGenerateGUID()
+    {
 
+        $guids = [];
+        for ( $i = 0; $i < 50; $i++ ) { $guids[] = generateGUID(); }
 
+        $this->assertTrue(
+            (bool) \preg_match( '~^[\\w\\d]{8}-[\\w\\d]{4}-[\\w\\d]{4}-[\\w\\d]{4}-[\\w\\d]{12}$~', $guids[ 0 ] )
+        );
+
+        $guids = \array_unique( $guids );
+
+        $this->assertSame( 50, \count( $guids ) );
+
+    }
 
 }

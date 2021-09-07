@@ -4,7 +4,7 @@
  * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.4.0
+ * @version        0.5.0
  */
 
 
@@ -29,6 +29,16 @@ interface IStringable
      * @return string
      */
     public function __toString();
+
+    /**
+     * Allow you to parse a string to a object of the type, that implements this interface.
+     *
+     * @param string $str          The string that should be parsed
+     * @param bool   $throwOnError Defines if the Method should throw an Exception on error.
+     * @return bool|static It returns false if parsing false. Otherwise the implementing instance is returned
+     * @throws ArgumentException If the string defines invalid/no data and only if $throwOnError is set to true.
+     */
+    public static function FromString( string $str, bool $throwOnError = false ) : bool|static;
 
 
 }

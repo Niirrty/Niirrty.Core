@@ -4,7 +4,7 @@
  * @copyright  © 2017-2021, Niirrty
  * @package        Niirrty
  * @since          2017-10-30
- * @version        0.4.0
+ * @version        0.5.0
  */
 
 
@@ -28,14 +28,14 @@ final class TypeTool
      *
      * @var string
      */
-    private static string $rxInt32 = '~^-?(0|[1-9]\d{0,11})$~';
+    private const RX_INT32 = '~^-?(0|[1-9]\d{0,11})$~';
 
     /**
      * This is the regular expression to check if a string can be used as big integer or long value.
      *
      * @var string
      */
-    private static string $rxInt64 = '~^-?(0|[1-9]\d{0,19})$~';
+    private const RX_INT64 = '~^-?(0|[1-9]\d{0,19})$~';
 
     /**
      * This is the regular expression to check if a string can be used as double precission value,
@@ -43,7 +43,7 @@ final class TypeTool
      *
      * @var string
      */
-    private static string $rxD1 = '~^-?((0|[1-9]\d{0,20})?\.\d{0,14}|\.\d{0,14})$~';
+    private const RX_D1 = '~^-?((0|[1-9]\d{0,20})?\.\d{0,14}|\.\d{0,14})$~';
 
     /**
      * This is the regular expression to check if a string can be used as decimal value,
@@ -51,21 +51,21 @@ final class TypeTool
      *
      * @var string
      */
-    private static string $D = '~^-?((0|[1-9]\d{0,20})?(\.|,)\d{0,14}|(\.|,)\d{1,14})$~';
+    private const RX_D = '~^-?((0|[1-9]\d{0,20})?(\.|,)\d{0,14}|(\.|,)\d{1,14})$~';
 
     /**
      * This is the regular expression to check if a string can be used a boolean TRUE value.
      *
      * @var string
      */
-    private static string $rxBoolTRUE = '~^([1-9]\d*|t(rue)?|on|yes|ok|enabled|disabled|readonly|autocomplete|autofill|selected)$~i';
+    private const RX_BOOL_TRUE = '~^([1-9]\d*|t(rue)?|on|yes|ok|enabled|disabled|readonly|autocomplete|autofill|selected)$~i';
 
     /**
      * This is the regular expression to check if a string can be used a boolean FALSE value.
      *
      * @var string
      */
-    private static string $rxBoolFALSE = '~^(0|-[1-9]\d*|f(alse)|off|no|out)$~i';
+    private const RX_BOOL_FALSE = '~^(0|-[1-9]\d*|f(alse)|off|no|out)$~i';
 
     #endregion
 
@@ -91,7 +91,7 @@ final class TypeTool
             return false;
         }
 
-        return (bool) \preg_match( TypeTool::$rxInt32, $strValue );
+        return (bool) \preg_match( TypeTool::RX_INT32, $strValue );
 
     }
 
@@ -130,7 +130,7 @@ final class TypeTool
             return false;
         }
 
-        if ( \preg_match( TypeTool::$rxInt32, $strVal ) )
+        if ( \preg_match( TypeTool::RX_INT32, $strVal ) )
         {
             $intValueOut = (int) $strVal;
             return true;
@@ -150,17 +150,17 @@ final class TypeTool
     public static function IsDecimal( mixed $value, bool $cultureInvariant = false ) : bool
     {
 
-        if ( \is_float( $value ) || \is_int( $value ) || \preg_match( TypeTool::$rxInt64, (string) $value ) )
+        if ( \is_float( $value ) || \is_int( $value ) || \preg_match( TypeTool::RX_INT64, (string) $value ) )
         {
             return true;
         }
 
         if ( ! $cultureInvariant )
         {
-            return (bool) \preg_match( TypeTool::$rxD1, (string) $value );
+            return (bool) \preg_match( TypeTool::RX_D1, (string) $value );
         }
 
-        return (bool) \preg_match( TypeTool::$D, (string) $value );
+        return (bool) \preg_match( TypeTool::RX_D, (string) $value );
 
     }
 
@@ -195,14 +195,14 @@ final class TypeTool
         {
             return false;
         }
-        if ( \preg_match( TypeTool::$rxInt64, $strVal ) )
+        if ( \preg_match( TypeTool::RX_INT64, $strVal ) )
         {
             $floatValueOut = (float) $strVal;
             return true;
         }
         if ( ! $cultureInvariant )
         {
-            if ( \preg_match( TypeTool::$rxD1, $strVal ) )
+            if ( \preg_match( TypeTool::RX_D1, $strVal ) )
             {
                 $floatValueOut = (float) $strVal;
                 return true;
@@ -210,7 +210,7 @@ final class TypeTool
             return false;
         }
 
-        if ( \preg_match( TypeTool::$D, $strVal ) )
+        if ( \preg_match( TypeTool::RX_D, $strVal ) )
         {
             $floatValueOut = (float) \str_replace( ',', '.', $strVal );
             return true;
@@ -277,13 +277,13 @@ final class TypeTool
             return true;
         }
 
-        if ( \preg_match( TypeTool::$rxBoolTRUE, $value ) )
+        if ( \preg_match( TypeTool::RX_BOOL_TRUE, $value ) )
         {
             $resultingBoolValue = true;
             return true;
         }
 
-        if ( \preg_match( TypeTool::$rxBoolFALSE, $value ) )
+        if ( \preg_match( TypeTool::RX_BOOL_FALSE, $value ) )
         {
             $resultingBoolValue = false;
             return true;

@@ -104,7 +104,7 @@ class TypeToolTest extends TestCase
         $this->assertTrue( TypeTool::IsBoolConvertible( $fp, $bool1 ) );
         fclose( $fp );
         $this->assertTrue( $bool1 );
-        $this->assertTrue( TypeTool::IsBoolConvertible( new Stringable( 'false' ), $bool1 ) );
+        $this->assertTrue( TypeTool::IsBoolConvertible( new Stringable( 0 ), $bool1 ) );
         $this->assertFalse( $bool1 );
         $this->assertFalse( TypeTool::IsBoolConvertible( new \stdClass(), $bool1 ) );
         $this->assertTrue( TypeTool::IsBoolConvertible( [], $bool1 ) );

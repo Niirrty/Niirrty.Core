@@ -4,7 +4,7 @@
  * @copyright  © 2017-2021, Niirrty
  * @package    Niirrty
  * @since      2017-10-30
- * @version    0.4.0
+ * @version    0.5.0
  */
 
 
@@ -39,13 +39,14 @@ class ArgumentException extends NiirrtyException
      * Init a new instance.
      *
      * @param string          $argumentName  The argument/parameter name
-     * @param mixed           $argValue The argument/parameter value
+     * @param mixed           $argumentValue The argument/parameter value
      * @param string|null     $message  The error message (default=null)
      * @param int|string      $code     The error code (default=\E_USER_ERROR)
      * @param \Throwable|null $previous A optional previous exception
      */
     public function __construct(
-        protected string $argumentName, mixed $argValue, ?string $message = null, int|string $code = 256, ?\Throwable $previous = null )
+        protected string $argumentName, protected mixed $argumentValue, ?string $message = null,
+        int|string $code = 256, ?\Throwable $previous = null )
     {
 
         // Getting the debug backtrace to find out the method/function that is called with an bad argument.
@@ -64,7 +65,7 @@ class ArgumentException extends NiirrtyException
             'Argument $' . \ltrim( $argumentName, '$' )
             .  ( empty( $fn ) ? '' : ' of ' . $fn . '(…)' )
             .  ' is Invalid! It uses a value of type '
-            .  static::GetTypeStr( $argValue )
+            .  static::GetTypeStr( $argumentValue )
             .  static::appendMessage( $message ),
             $code,
             $previous
@@ -88,6 +89,18 @@ class ArgumentException extends NiirrtyException
     {
 
         return $this->argumentName;
+
+    }
+
+    /**
+     * Returns the value of the error argument/parameter.
+     *
+     * @return mixed
+     */
+    public final function getArgumentValue() : mixed
+    {
+
+        return $this->argumentValue;
 
     }
 
