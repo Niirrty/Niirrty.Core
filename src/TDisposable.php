@@ -15,7 +15,7 @@ namespace Niirrty;
 
 
 /**
- * Trait TDisposable. If your class uses this trait, it implements a part of the {@see \Niirrty\IDisposable} interface
+ * Trait TDisposable. If your class uses this trait, it implements a part of the {@see IDisposable} interface
  *
  * @since v0.1.0
  */
@@ -45,7 +45,7 @@ trait TDisposable
     /**
      * Marks the instance as disposed.
      */
-    protected function dispose()
+    protected function dispose() : void
    {
 
       $this->_disposed = true;

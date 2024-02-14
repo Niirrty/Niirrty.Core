@@ -51,7 +51,7 @@ final class TypeTool
      *
      * @var string
      */
-    private const RX_D = '~^-?((0|[1-9]\d{0,20})?(\.|,)\d{0,14}|(\.|,)\d{1,14})$~';
+    private const RX_D = '~^-?((0|[1-9]\d{0,20})?([.,])\d{0,14}|([.,])\d{1,14})$~';
 
     /**
      * This is the regular expression to check if a string can be used a boolean TRUE value.
@@ -571,9 +571,11 @@ final class TypeTool
      * Returns the native type name of the defined value.
      *
      * @param  mixed $value The value.
-     * @return bool|string Returns the name of the type (see \Messier\Type::PHP_* constants) or boolean FALSE if the value has not native type
+     *
+     * @return false|string Returns the name of the type (see \Niirrty\Type::PHP_* constants) or boolean FALSE if the
+     *                      value has not native type
      */
-    public static function GetNativeType( mixed $value ): bool|string
+    public static function GetNativeType( mixed $value ): false|string
     {
 
         if ( \is_string( $value ) )
@@ -659,7 +661,7 @@ final class TypeTool
     }
 
     /**
-     * Converts the value! It must be a native PHP type (bool, int, float, double, string) to a other native PHP type.
+     * Converts the value! It must be a native PHP type (bool, int, float, double, string) to other native PHP type.
      *
      * @param  mixed  $sourceValue The value to convert
      * @param  string $newType Native PHP type as target type. (See \Niirrty\Type::PHP_* constants)

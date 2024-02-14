@@ -80,7 +80,7 @@ abstract class ArrayHelper
                 ? \strtolower( $hits[ 1 ][ $i ] )
                 : $hits[ 1 ][ $i ];
 
-            if ( isset( $hits[ 4 ][ $i ] ) && ! empty( $hits[ 4 ][ $i ] ) )
+            if ( ! empty( $hits[ 4 ][ $i ] ) )
             {
                 // Get the value from inside double quotes
                 $attributes[ $key ] = unescapeXML( $hits[ 4 ][ $i ], true );
@@ -187,15 +187,7 @@ abstract class ArrayHelper
     public static function IsNumericIndicated( array $array ) : bool
     {
 
-        $itemCount = \count( $array );
-
-        if ( $itemCount < 1 ) { return true; }
-
-        // Create the representative value (the joined array keys must be equal to it)
-        $nums = \implode( '', \range( 0, $itemCount - 1 ) );
-
-        // check the required array keys with the given.
-        return ( $nums === \implode( '', \array_keys( $array ) ) );
+        return \array_is_list( $array );
 
     }
 

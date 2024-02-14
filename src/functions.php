@@ -141,7 +141,6 @@ function strLastPos( string $str, string $needle, bool $caseLess = false, string
  * @return array|NULL       Return a numeric indicated array with all positions of $needle in $str or NULL if
  *                          nothing was found
  * @uses   Multi byte extension The function requires that PHP have the Multi byte extension mb_string enabled.
- * @uses   \Niirrty\strPos
  * @since  v0.1
  */
 function strPositions( string $str, string $needle, bool $caseLess = false, string $charset = 'UTF-8' ) : ?array
@@ -280,10 +279,6 @@ function escapeXMLArg( string $str ) : string
  * @param  mixed  $str  The value to escape
  * @param  string $type The escaping type (One of the ESCAPE_* constants.
  * @return string
- * @uses   \Niirrty\escapeXML
- * @uses   \url_encode
- * @uses   \json_encode
- * @uses   \Niirrty\escapeXMLArg
  * @since  v0.1
  */
 function escape( string $str, string $type = ESCAPE_HTML_ALL ) : string
@@ -378,7 +373,6 @@ function unescapeXML( string $str, bool $full = false ) : string
  * @param  string  $appendix  Optional appendix (Defaults to '…')
  * @param  string  $charset   Encoding of the string (defaults to 'UTF-8')
  * @return string
- * @uses   \Niirrty\substring
  * @since  v0.1
  */
 function strMax( string $str, int $maxLength, string $appendix = '…', string $charset = 'UTF-8' ) : string
@@ -450,10 +444,9 @@ function stripTags( string $str ) : string
  *
  * @param  mixed       $value    The value to print out
  * @param  string|null $preClass Optional class attribute value of generated pre HTML element
- * @uses   \Niirrty\escapeXML
  * @since  v0.1
  */
-function print_h( mixed $value, ?string $preClass = null )
+function print_h( mixed $value, ?string $preClass = null ) : void
 {
 
     echo '<pre',
@@ -605,7 +598,7 @@ function generateGUID() : string
  * @param $errLine
  * @throws PhpException
  */
-function error_handler( $errNo, $errStr, $errFile, $errLine )
+function error_handler( $errNo, $errStr, $errFile, $errLine ) : void
 {
 
     switch ( $errNo )

@@ -33,7 +33,7 @@ class PhpException extends NiirrtyException
      * @param int    $line
      * @param        $file
      */
-    public function __construct( $msg, $code, $line, $file )
+    public function __construct( string $msg, $code, $line, $file )
     {
 
         parent::__construct( \strip_tags( $msg ), $code );

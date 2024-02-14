@@ -11,3 +11,7 @@
 * **`Niirrty\IStringable`**: The interface now declares a static method for parsing a string to an implementing instance.
 * **`Niirrty\generateGUID()`**: Add this function to create a unique GUID (36 chars)
 * **`NIIRRTY_NO_ERROR_HANDLER`**: If this constant is defined, the Niirrty internal error handler is not registered.
+
+# Version 0.6.0 `2023-02-14`
+
+* Some small fixes for better working with new PHP 8.1 Features

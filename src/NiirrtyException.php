@@ -159,7 +159,7 @@ class NiirrtyException extends \Exception
         $previous = $this->getPrevious();
 
         // if no previous exception is defined return the current generated message
-        if ( null === $previous || ! ( $previous instanceof \Throwable ) )
+        if ( ! ( $previous instanceof \Throwable ) )
         {
             return $msg;
         }

@@ -15,7 +15,7 @@ namespace Niirrty;
 
 
 /**
- * This is the Niirrty {@see \Niirrty\IErrorInfo} depending base exception.
+ * This is the Niirrty {@see IErrorInfo} depending base exception.
  *
  * @since v0.1.0
  */
@@ -34,7 +34,7 @@ class ErrorInfoException extends NiirrtyException
      * @param \Throwable|null $previous  Optional previous throwable.
      */
     public function __construct (
-        protected IErrorInfo $errorInfo, ?string $message = null, $code = 0, ?\Throwable $previous = null )
+        protected readonly IErrorInfo $errorInfo, ?string $message = null, $code = 0, ?\Throwable $previous = null )
     {
 
         parent::__construct(

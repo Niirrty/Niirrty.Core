@@ -45,7 +45,7 @@ class ArgumentException extends NiirrtyException
      * @param \Throwable|null $previous A optional previous exception
      */
     public function __construct(
-        protected string $argumentName, protected mixed $argumentValue, ?string $message = null,
+        protected readonly string $argumentName, protected readonly mixed $argumentValue, ?string $message = null,
         int|string $code = 256, ?\Throwable $previous = null )
     {
 
