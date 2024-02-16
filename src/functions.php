@@ -621,7 +621,8 @@ function error_handler( $errNo, $errStr, $errFile, $errLine ) : void
             // Never trigger a exception if PHPUnits Clover.php raises a error! :-(
             // This is required for development needs because Clover.php raises a fatal error
             // while using the bad error hiding @ operator in combination with mkdir.
-            if ( ! strEndsWith( $errFile, 'Clover.php' ) )
+            if ( ! strEndsWith( $errFile, 'Clover.php' ) &&
+                 ! strEndsWith( $errFile, 'IncludeNameFilterIterator.php' ) )
             {
                 throw new PhpException( $errStr, $errNo, $errLine, $errFile );
             }
