@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.6.1 `2024-02-17`
+## Version 0.6.2 `2024-02-17`
 
 * Add Interfaces `IToString` and `IToArray` and use it inside `IStringable` and `IArrayable`
 
