@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.6.1 `2024-02-17`
+
+* Add Interfaces `IToString` and `IToArray` and use it inside `IStringable` and `IArrayable`
+
 ## Version 0.6.1 `2024-02-16`
 
 * PHPUnit triggers a warning in IncludeNameFilterIterator.php. It was catched by Library error handler an PHPUnit can not handle it. So the handler was changed to ignore these warning.

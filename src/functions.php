@@ -622,7 +622,7 @@ function error_handler( $errNo, $errStr, $errFile, $errLine ) : void
             // This is required for development needs because Clover.php raises a fatal error
             // while using the bad error hiding @ operator in combination with mkdir.
             if ( ! strEndsWith( $errFile, 'Clover.php' ) &&
-                 ! strEndsWith( $errFile, 'IncludeNameFilterIterator.php' ) )
+                 ! strEndsWith( $errFile, 'NameFilterIterator.php' ) )
             {
                 throw new PhpException( $errStr, $errNo, $errLine, $errFile );
             }
